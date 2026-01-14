@@ -4,7 +4,7 @@ This document outlines the step-by-step execution plan for the "From Nope To Web
 
 ## Phase 1: Scaffolding & Configuration (Day 1-2)
 
-- [x] **Initialize Project**: Setup Next.js 14+ with App Router.
+- [x] **Initialize Project**: Setup Next.js 15+ with App Router.
   - [x] Configure TypeScript (Strict Mode).
   - [x] Configure Tailwind CSS v4.
   - [x] Install shadcn/ui machinery.
@@ -105,6 +105,12 @@ This document outlines the step-by-step execution plan for the "From Nope To Web
 
 ### Next Steps
 
-1. Configure Clerk API keys in `.env` (Done)
-2. Build course viewer components
+### Next Steps
+
+1. **Course Content Expansion** (Current Focus)
+   - [ ] Update `convex/seed.ts` with full curriculum (HTML to T3 Stack).
+   - [ ] Create `src/app/[locale]/courses/page.tsx` (Course Catalog).
+   - [ ] Create `src/app/[locale]/courses/[courseSlug]/page.tsx` (Course Overview).
+   - [ ] Create `src/app/[locale]/courses/[courseSlug]/[lessonSlug]/page.tsx` (Lesson Viewer).
+2. Configure Clerk API keys in `.env` (Done)
 3. Implement code editor with Sandpack
