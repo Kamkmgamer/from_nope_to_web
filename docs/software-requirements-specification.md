@@ -2,7 +2,7 @@
 
 ## 1. Introduction
 
-The "From Zero to Next" platform aims to provide a guided learning path for web development, specifically targeting the transition from basic web technologies to the modern T3 stack. Key differentiators include full bilingual support (Arabic/English) and AI-assisted learning.
+The "From Nope To Web" platform aims to provide a guided learning path for web development, specifically targeting the transition from basic web technologies to the modern T3 stack. Key differentiators include full bilingual support (Arabic/English) and AI-assisted learning.
 
 ## 2. Functional Requirements
 

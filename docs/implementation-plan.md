@@ -1,6 +1,6 @@
 # Implementation Plan
 
-This document outlines the step-by-step execution plan for the "From Zero to Next" educational platform.
+This document outlines the step-by-step execution plan for the "From Nope To Web" educational platform.
 
 ## Phase 1: scaffolding & Configuration (Day 1-2)
 
