@@ -3,8 +3,7 @@ import { mutation } from "./_generated/server";
 export const seed = mutation({
   args: {},
   handler: async (ctx) => {
-    // Check if data already exists
-    // CLEANUP Phase: Remove existing courses/modules/lessons to ensure fresh seed
+    // 1. CLEANUP
     const allLessons = await ctx.db.query("lessons").collect();
     for (const l of allLessons) await ctx.db.delete(l._id);
 
@@ -15,279 +14,424 @@ export const seed = mutation({
     for (const c of allCourses) await ctx.db.delete(c._id);
 
     /* =========================================
-       COURSE 1: Web Foundations (HTML, CSS, Git)
+       COURSE 1: WEB FOUNDATIONS
     ========================================= */
     const course1Id = await ctx.db.insert("courses", {
       slug: "web-foundations",
-      titleEn: "Zero to Hero: Web Foundations",
-      titleAr: "من الصفر إلى الاحتراف: أساسيات الويب",
-      descriptionEn: "Master the bedrock of the internet: HTML, CSS, and Git. No prior experience needed.",
-      descriptionAr: "أتقن أساسيات الإنترنت: HTML و CSS و Git. لا حاجة لخبرة سابقة.",
+      titleEn: "Web Foundations: HTML & CSS",
+      titleAr: "أساسيات الويب: HTML و CSS",
+      descriptionEn: "Your first step into web development. Master the structure and style of the internet.",
+      descriptionAr: "خطوتك الأولى في تطوير الويب. أتقن هيكل وتنسيق الإنترنت.",
       order: 1,
       isPublished: true,
-      imageUrl: "/images/courses/foundations.jpg",
+      imageUrl: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=2070&auto=format&fit=crop",
     });
 
-    // --- Module 1: HTML ---
+    // --- C1 Module 1: HTML ---
     const c1m1Id = await ctx.db.insert("modules", {
       courseId: course1Id,
       order: 1,
-      titleEn: "HTML: The Structure",
-      titleAr: "HTML: الهيكل",
-      descriptionEn: "Learn correct semantic structure for web documents.",
-      descriptionAr: "تعلم الهيكل الدلالي الصحيح لمستندات الويب.",
+      titleEn: "HTML: Structuring the Web",
+      titleAr: "HTML: هيكلة الويب",
+      descriptionEn: "Learn to speak the language of the browser.",
+      descriptionAr: "تعلم التحدث بلغة المتصفح.",
     });
 
     await ctx.db.insert("lessons", {
       moduleId: c1m1Id,
-      slug: "html-basics",
+      slug: "how-web-works",
       order: 1,
-      titleEn: "HTML Basics & Tags",
-      titleAr: "أساسيات ووسوم HTML",
+      titleEn: "How the Web Works",
+      titleAr: "كيف يعمل الويب",
       contentEn: `
-# HTML Basics & Tags
+# How the Web Works
 
-HTML (HyperText Markup Language) is the code that organizes your web content.
+Before writing code, we must understand the ecosystem.
 
-## Key Concepts
-- **Tags**: The instructions (e.g., \`<p>\`, \`<h1>\`).
-- **Elements**: The start tag, content, and end tag.
-- **Attributes**: Extra info about elements (e.g., \`class="btn"\`).
+## Client vs. Server
+- **Client**: Your browser (Chrome, Firefox). It *requests* information.
+- **Server**: A computer far away that *serves* the website files.
 
-\`\`\`html
-<!DOCTYPE html>
-<html>
-  <body>
-    <h1>Hello World</h1>
-    <p>This is my first paragraph.</p>
-  </body>
-</html>
+## The Request-Response Cycle
+1. You type \`google.com\`.
+2. Browser sends a **GET** request.
+3. Server receives it and sends back HTML code.
+4. Browser renders that code into pixels.
+
+\`\`\`
+Client -> Request -> Server
+Client <- Response <- Server
 \`\`\`
 `,
       contentAr: `
-# أساسيات ووسوم HTML
+# كيف يعمل الويب
 
-HTML (لغة توصيف النص التشعبي) هي الكود الذي ينظم محتوى الويب الخاص بك.
+قبل كتابة الكود، يجب أن نفهم النظام البيئي.
 
-## مفاهيم رئيسية
-- **الوسوم**: التعليمات (مثل \`<p>\`, \`<h1>\`).
-- **العناصر**: وسم البداية، المحتوى، ووسم النهاية.
-- **السمات**: معلومات إضافية حول العناصر (مثل \`class="btn"\`).
+## العميل مقابل الخادم
+- **العميل (Client)**: متصفحك (Chrome, Firefox). هو الذي *يطلب* المعلومات.
+- **الخادم (Server)**: كمبيوتر بعيد *يخدم* ملفات الموقع.
+
+## دورة الطلب والاستجابة
+1. تكتب \`google.com\`.
+2. يرسل المتصفح طلب **GET**.
+3. يستقبل الخادم الطلب ويرسل كود HTML.
+4. يقوم المتصفح بتحويل الكود إلى صورة مرئية.
 `,
-      estimatedMinutes: 15,
+      estimatedMinutes: 10,
       isPublished: true,
     });
 
     await ctx.db.insert("lessons", {
       moduleId: c1m1Id,
-      slug: "semantic-html",
+      slug: "html-syntax",
       order: 2,
-      titleEn: "Semantic HTML",
-      titleAr: "HTML الدلالي",
-      contentEn: "Why use `<article>` instead of `<div>`? Accessibility and SEO.",
-      contentAr: "لماذا نستخدم `<article>` بدلاً من `<div>`؟ إمكانية الوصول و SEO.",
+      titleEn: "HTML Syntax & Tags",
+      titleAr: "بناء جملة HTML والوسوم",
+      contentEn: `
+# HTML Syntax
+
+HTML is made of **elements**. An element usually has an opening tag, content, and a closing tag.
+
+\`\`\`html
+<tagname>Content goes here...</tagname>
+\`\`\`
+
+## Common Tags
+- \`<h1>\` to \`<h6>\`: Headings
+- \`<p>\`: Paragraph
+- \`<button>\`: Clickable button
+
+## Attributes
+Tags can have **attributes** to provide more info.
+
+\`\`\`html
+<a href="https://google.com">Click me</a>
+\`\`\`
+- \`href\` is the attribute name.
+- \`"https://google.com"\` is the value.
+`,
+      contentAr: `
+# بناء جملة HTML
+
+يتكون HTML من **عناصر**. عادة ما يحتوي العنصر على وسم بداية، محتوى، ووسم نهاية.
+
+\`\`\`html
+<اسم_الوسم>المحتوى هنا...</اسم_الوسم>
+\`\`\`
+
+## وسوم شائعة
+- \`<h1>\` إلى \`<h6>\`: تعني العناوين
+- \`<p>\`: فقرة نصية
+- \`<button>\`: زر قابل للنقر
+
+## السمات (Attributes)
+يمكن أن تحتوي الوسوم على **سمات** لتوفير معلومات إضافية.
+
+\`\`\`html
+<a href="https://google.com">اضغط هنا</a>
+\`\`\`
+- \`href\` هو اسم السمة.
+`,
       estimatedMinutes: 20,
       isPublished: true,
     });
 
-    // --- Module 2: CSS ---
+    // --- C1 Module 2: CSS ---
     const c1m2Id = await ctx.db.insert("modules", {
       courseId: course1Id,
       order: 2,
-      titleEn: "CSS: The Style",
-      titleAr: "CSS: التنسيق",
-      descriptionEn: "Colors, layouts, and responsive design.",
-      descriptionAr: "الألوان، التخطيطات، والتصميم المتجاوب.",
+      titleEn: "CSS: Styling the Web",
+      titleAr: "CSS: تنسيق الويب",
+      descriptionEn: "Make it beautiful with colors, fonts, and layouts.",
+      descriptionAr: "اجعلها جميلة بالألوان والخطوط والتخطيطات.",
     });
 
     await ctx.db.insert("lessons", {
       moduleId: c1m2Id,
-      slug: "css-box-model",
+      slug: "css-selectors",
       order: 1,
-      titleEn: "The Box Model",
-      titleAr: "نموذج الصندوق",
-      contentEn: "Understanding margin, border, padding, and content.",
-      contentAr: "فهم الهوامش، الحدود، الحشو، والمحتوى.",
+      titleEn: "CSS Selectors",
+      titleAr: "محددات CSS",
+      contentEn: `
+# CSS Selectors
+
+To style HTML, you must first **select** it.
+
+## 1. Element Selector
+Targets all elements of a type.
+\`\`\`css
+p {
+  color: red;
+}
+\`\`\`
+
+## 2. Class Selector (.)
+Targets elements with a specific \`class\` attribute. **Reusable.**
+\`\`\`html
+<p class="error">Alert!</p>
+\`\`\`
+\`\`\`css
+.error {
+  color: red;
+  font-weight: bold;
+}
+\`\`\`
+
+## 3. ID Selector (#)
+Targets a ONE specific element.
+\`\`\`html
+<div id="navbar">...</div>
+\`\`\`
+\`\`\`css
+#navbar {
+  background: black;
+}
+\`\`\`
+`,
+      contentAr: `
+# محددات CSS (Selectors)
+
+لتنسيق HTML، يجب أولاً **تحديده**.
+
+## 1. محدد العنصر
+يستهدف جميع العناصر من نوع معين.
+\`\`\`css
+p {
+  color: red;
+}
+\`\`\`
+
+## 2. محدد الفئة (Class Selector .)
+يستهدف العناصر التي لها سمة \`class\` معينة. **قابل لإعادة الاستخدام.**
+
+## 3. محدد المعرف (ID Selector #)
+يستهدف عنصراً واحداً محدداً فقط.
+`,
       estimatedMinutes: 25,
       isPublished: true,
     });
 
-    await ctx.db.insert("lessons", {
+     await ctx.db.insert("lessons", {
       moduleId: c1m2Id,
-      slug: "flexbox",
+      slug: "box-model",
       order: 2,
-      titleEn: "Modern Layouts: Flexbox",
-      titleAr: "التخطيطات الحديثة: Flexbox",
-      contentEn: "Mastering `display: flex`, `justify-content`, and `align-items`.",
-      contentAr: "إتقان `display: flex` و `justify-content` و `align-items`.",
+      titleEn: "The Box Model",
+      titleAr: "نموذج الصندوق",
+      contentEn: `
+# The Box Model
+
+Every element in HTML is a box.
+
+![Box Model Diagram](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Box_Model/Introduction_to_the_CSS_box_model/boxmodel-(1).png)
+
+## Layers
+1. **Content**: The text or image itself.
+2. **Padding**: Space *inside* the border, around the content.
+3. **Border**: The line around the padding.
+4. **Margin**: Space *outside* the border, separating it from neighbors.
+
+\`\`\`css
+.card {
+  width: 300px;
+  padding: 20px;
+  border: 1px solid black;
+  margin: 10px;
+}
+\`\`\`
+`,
+      contentAr: `
+# نموذج الصندوق (Box Model)
+
+كل عنصر في HTML هو عبارة عن صندوق.
+
+## الطبقات
+1. **المحتوى (Content)**: النص أو الصورة نفسها.
+2. **الحشو (Padding)**: المسافة *داخل* الحدود، حول المحتوى.
+3. **الحدود (Border)**: الخط المحيط بالحشو.
+4. **الهوامش (Margin)**: المسافة *خارج* الحدود.
+`,
       estimatedMinutes: 30,
       isPublished: true,
     });
 
-    // --- Module 3: Git ---
-    const c1m3Id = await ctx.db.insert("modules", {
-      courseId: course1Id,
-      order: 3,
-      titleEn: "Git & Version Control",
-      titleAr: "Git والتحكم في النسخ",
-    });
-
-    await ctx.db.insert("lessons", {
-      moduleId: c1m3Id,
-      slug: "git-basics",
-      order: 1,
-      titleEn: "Git Basics",
-      titleAr: "أساسيات Git",
-      contentEn: "Init, add, commit, push. The daily workflow.",
-      contentAr: "Init, add, commit, push. سير العمل اليومي.",
-      estimatedMinutes: 20,
-      isPublished: true,
-    });
 
     /* =========================================
-       COURSE 2: JavaScript & TypeScript
+       COURSE 2: JAVASCRIPT MASTERY
     ========================================= */
     const course2Id = await ctx.db.insert("courses", {
-      slug: "js-ts-mastery",
-      titleEn: "JavaScript & TypeScript Mastery",
-      titleAr: "احتراف JavaScript و TypeScript",
-      descriptionEn: "Deep dive into the logic that powers the modern web.",
-      descriptionAr: "غوص عميق في المنطق الذي يشغل الويب الحديث.",
+      slug: "javascript-mastery",
+      titleEn: "JavaScript: The Programming Language",
+      titleAr: "JavaScript: لغة البرمجة",
+      descriptionEn: "Learn the logic needed to build interactive applications.",
+      descriptionAr: "تعلم المنطق اللازم لبناء تطبيقات تفاعلية.",
       order: 2,
       isPublished: true,
-      imageUrl: "/images/courses/js-ts.jpg",
+      imageUrl: "https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?q=80&w=2070&auto=format&fit=crop",
     });
 
-    // --- Module 1: JS Basics ---
     const c2m1Id = await ctx.db.insert("modules", {
       courseId: course2Id,
       order: 1,
-      titleEn: "JavaScript Fundamentals",
-      titleAr: "أساسيات JavaScript",
+      titleEn: "JS Primitives",
+      titleAr: "أساسيات JS",
+      descriptionEn: "Variables, Types, and Loops",
+      descriptionAr: "المتغيرات والأنواع والحلقات",
     });
 
     await ctx.db.insert("lessons", {
       moduleId: c2m1Id,
-      slug: "variables-types",
+      slug: "variables",
       order: 1,
-      titleEn: "Variables & Data Types",
-      titleAr: "المتغيرات وأنواع البيانات",
-      contentEn: "Let, const, strings, numbers, and booleans.",
-      contentAr: "Let, const, السلاسل النصية، الأرقام، والقيم المنطقية.",
+      titleEn: "Variables: let vs const",
+      titleAr: "المتغيرات: let مقابل const",
+      contentEn: `
+# Variables
+
+Variables store data.
+
+## \`let\`
+Use when the value *will change*.
+\`\`\`js
+let score = 0;
+score = 10; // OK
+\`\`\`
+
+## \`const\`
+Use when the value *will not change*.
+\`\`\`js
+const pi = 3.14;
+pi = 5; // ERROR!
+\`\`\`
+
+## Avoid \`var\`
+Old JavaScript used \`var\`. It has confusing scoping rules. stick to \`let\` and \`const\`.
+`,
+      contentAr: `
+# المتغيرات
+
+المتغيرات تخزن البيانات.
+
+## \`let\`
+استخدمها عندما تكون القيمة *ستتغير*.
+
+## \`const\`
+استخدمها عندما تكون القيمة *لن تتغير*.
+
+## تجنب \`var\`
+JavaScript القديمة كانت تستخدم \`var\`. لها قواعد نطاق مربكة. التزم بـ \`let\` و \`const\`.
+`,
       estimatedMinutes: 20,
       isPublished: true,
     });
 
-    await ctx.db.insert("lessons", {
-      moduleId: c2m1Id,
-      slug: "functions-scope",
-      order: 2,
-      titleEn: "Functions & Scope",
-      titleAr: "الدوال والمدى",
-      contentEn: "Arrow functions, closures, and `this`.",
-      contentAr: "الدوال السهمية، الإغلاق (Closures)، و `this`.",
-      estimatedMinutes: 30,
-      isPublished: true,
-    });
-
-    // --- Module 2: TypeScript ---
-    const c2m2Id = await ctx.db.insert("modules", {
-      courseId: course2Id,
-      order: 2,
-      titleEn: "TypeScript Essentials",
-      titleAr: "أساسيات TypeScript",
-    });
-
-    await ctx.db.insert("lessons", {
-      moduleId: c2m2Id,
-      slug: "why-typescript",
-      order: 1,
-      titleEn: "Why TypeScript?",
-      titleAr: "لماذا TypeScript؟",
-      contentEn: "Static typing vs dynamic typing. The benefits of safety.",
-      contentAr: "الأنواع الثابتة مقابل الديناميكية. فوائد الأمان.",
-      estimatedMinutes: 15,
-      isPublished: true,
-    });
 
     /* =========================================
-       COURSE 3: Modern Fullstack (T3 Stack)
+       COURSE 3: REACT & NEXT.JS
     ========================================= */
     const course3Id = await ctx.db.insert("courses", {
-      slug: "t3-fullstack",
-      titleEn: "Modern Fullstack with T3 Stack",
-      titleAr: "التطوير المتكامل الحديث مع T3 Stack",
-      descriptionEn: "Build production-ready apps with Next.js, tRPC, Prisma, and Tailwind CSS.",
-      descriptionAr: "ابنِ تطبيقات جاهزة للإنتاج باستخدام Next.js و tRPC و Prisma و Tailwind CSS.",
+      slug: "react-nextjs",
+      titleEn: "Modern React & Next.js",
+      titleAr: "React و Next.js الحديثة",
+      descriptionEn: "Build full-stack applications with the world's most popular framework.",
+      descriptionAr: "ابنِ تطبيقات متكاملة مع الإطار الأكثر شهرة في العالم.",
       order: 3,
       isPublished: true,
-      imageUrl: "/images/courses/t3.jpg",
+      imageUrl: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=2070&auto=format&fit=crop",
     });
 
-    // --- Module 1: React & Next.js ---
     const c3m1Id = await ctx.db.insert("modules", {
       courseId: course3Id,
       order: 1,
-      titleEn: "React & Next.js 15",
-      titleAr: "React و Next.js 15",
+      titleEn: "React Core",
+      titleAr: "جوهر React",
     });
 
     await ctx.db.insert("lessons", {
       moduleId: c3m1Id,
-      slug: "react-hooks",
+      slug: "components-props",
       order: 1,
-      titleEn: "Essential React Hooks",
-      titleAr: "خطافات React الأساسية",
-      contentEn: "useState, useEffect, useMemo. Managing state and side effects.",
-      contentAr: "useState, useEffect, useMemo. إدارة الحالة والآثار الجانبية.",
+      titleEn: "Components & Props",
+      titleAr: "المكونات والخصائص",
+      contentEn: `
+# Components
+
+React apps are made of small, reusable chunks called **Components**.
+
+\`\`\`jsx
+function Button() {
+  return <button>Click me</button>;
+}
+\`\`\`
+
+# Props
+
+Pass data into components like function arguments.
+
+\`\`\`jsx
+function Greeting({ name }) {
+  return <h1>Hello, {name}!</h1>;
+}
+
+// Usage
+<Greeting name="Alice" />
+\`\`\`
+`,
+      contentAr: `
+# المكونات (Components)
+
+تطبيقات React تتكون من أجزاء صغيرة قابلة لإعادة الاستخدام تسمى **المكونات**.
+
+# الخصائص (Props)
+
+تمرير البيانات إلى المكونات مثل وسائط الدوال.
+`,
       estimatedMinutes: 30,
       isPublished: true,
     });
 
-    await ctx.db.insert("lessons", {
+     await ctx.db.insert("lessons", {
       moduleId: c3m1Id,
-      slug: "server-components",
+      slug: "use-state",
       order: 2,
-      titleEn: "RSC & Server Actions",
-      titleAr: "مكونات الخادم وإجراءات الخادم",
-      contentEn: "The new paradigm of fetching data directly on the server.",
-      contentAr: "النموذج الجديد لجلب البيانات مباشرة على الخادم.",
-      estimatedMinutes: 40,
-      isPublished: true,
-    });
+      titleEn: "State with useState",
+      titleAr: "الحالة مع useState",
+      contentEn: `
+# Intepactivity with State
 
-    // --- Module 2: The T3 Backend ---
-    const c3m2Id = await ctx.db.insert("modules", {
-      courseId: course3Id,
-      order: 2,
-      titleEn: "The T3 Backend",
-      titleAr: "الخلفية البرمجية T3",
-    });
+Standard variables don't update the screen when they change. **State** does.
 
-    await ctx.db.insert("lessons", {
-      moduleId: c3m2Id,
-      slug: "trpc-setup",
-      order: 1,
-      titleEn: "End-to-end Typesafety with tRPC",
-      titleAr: "أمان الأنواع الشامل مع tRPC",
-      contentEn: "Calling backend functions like looking local.",
-      contentAr: "استدعاء وظائف الخلفية كما لو كانت محلية.",
+\`\`\`jsx
+import { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      Clicked {count} times
+    </button>
+  );
+}
+\`\`\`
+
+1. \`useState(0)\`: Initial value.
+2. \`count\`: Current value.
+3. \`setCount\`: Function to update value AND trigger re-render.
+`,
+      contentAr: `
+# التفاعلية مع الحالة (State)
+
+المتغيرات العادية لا تحدث الشاشة عند تغيرها. **State** تفعل ذلك.
+
+1. \`useState(0)\`: القيمة المبدئية.
+2. \`count\`: القيمة الحالية.
+3. \`setCount\`: دالة لتحديث القيمة وإعادة رسم المكون.
+`,
       estimatedMinutes: 35,
       isPublished: true,
     });
 
-    await ctx.db.insert("lessons", {
-      moduleId: c3m2Id,
-      slug: "prisma-db",
-      order: 2,
-      titleEn: "Database Access with Prisma",
-      titleAr: "الوصول لقاعدة البيانات مع Prisma",
-      contentEn: "Defining schema.prisma and querying your database.",
-      contentAr: "تعريف schema.prisma والاستعلام في قاعدة بياناتك.",
-      estimatedMinutes: 30,
-      isPublished: true,
-    });
-
-    return "Database seeded successfully with full curriculum!";
+    return "Database seeded with RICH content successfully!";
   },
 });

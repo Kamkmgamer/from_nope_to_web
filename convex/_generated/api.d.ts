@@ -8,7 +8,9 @@
  * @module
  */
 
+import type * as api_ from "../api.js";
 import type * as courses from "../courses.js";
+import type * as dashboard from "../dashboard.js";
 import type * as lessons from "../lessons.js";
 import type * as modules from "../modules.js";
 import type * as progress from "../progress.js";
@@ -22,7 +24,9 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  api: typeof api_;
   courses: typeof courses;
+  dashboard: typeof dashboard;
   lessons: typeof lessons;
   modules: typeof modules;
   progress: typeof progress;
