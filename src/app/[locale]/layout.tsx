@@ -36,10 +36,63 @@ const notoSansArabic = Noto_Sans_Arabic({
 });
 
 export const metadata: Metadata = {
-  title: "From Nope to Web | Learn Web Development",
+  title: {
+    default: "From Nope→Web | Learn Web Development",
+    template: "%s | From Nope→Web",
+  },
   description:
-    "The bilingual platform for mastering modern full-stack development. Learn React, Next.js, and the T3 stack",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+    "The bilingual platform for mastering modern full-stack development. Learn React, Next.js, and the T3 stack in Arabic and English.",
+  keywords: [
+    "web development",
+    "learn to code",
+    "React",
+    "Next.js",
+    "T3 stack",
+    "Arabic programming",
+    "bilingual coding",
+    "تعلم البرمجة",
+    "تطوير الويب",
+  ],
+  authors: [{ name: "KamkmGamer" }],
+  creator: "KamkmGamer",
+  icons: {
+    icon: [{ url: "/icon.png", type: "image/png" }],
+    apple: [{ url: "/apple-touch-icon.png" }],
+  },
+  manifest: "/manifest.json",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    alternateLocale: "ar_SA",
+    url: "https://fromnopetoweb.com",
+    siteName: "From Nope→Web",
+    title: "From Nope→Web | Learn Web Development",
+    description:
+      "The bilingual platform for mastering modern full-stack development. Learn React, Next.js, and the T3 stack in Arabic and English.",
+    images: [
+      {
+        url: "/images/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "From Nope→Web - Learn Web Development in Arabic + English",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "From Nope→Web | Learn Web Development",
+    description:
+      "The bilingual platform for mastering modern full-stack development. Learn in Arabic and English.",
+    images: ["/images/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
 };
 
 // Check if Clerk is properly configured
