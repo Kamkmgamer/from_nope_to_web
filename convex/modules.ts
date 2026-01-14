@@ -10,7 +10,7 @@ export const get = query({
 });
 
 // Get all modules for a course
-export const listByCourse = query({
+export const list = query({
   args: { courseId: v.id("courses") },
   handler: async (ctx, args) => {
     return await ctx.db

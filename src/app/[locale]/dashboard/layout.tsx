@@ -12,7 +12,7 @@ import {
   X,
   ArrowRight,
 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 export default function DashboardLayout({
   children,
@@ -21,6 +21,8 @@ export default function DashboardLayout({
 }) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const t = useTranslations("dashboard.sidebar");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
 
   const sidebarLinks = [
     { href: "/dashboard", icon: Home, label: t("overview") },
@@ -102,7 +104,7 @@ export default function DashboardLayout({
       )}
 
       {/* Main Content */}
-      <main className="pt-16 lg:ps-64 lg:pt-0">
+      <main className={`pt-16 lg:pt-0 ${isRTL ? "lg:pr-64" : "lg:pl-64"}`}>
         <div className="p-6 lg:p-8">{children}</div>
       </main>
     </div>
