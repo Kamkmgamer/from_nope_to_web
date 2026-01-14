@@ -8,16 +8,16 @@ This document outlines the step-by-step execution plan for the "From Nope To Web
   - [x] Configure TypeScript (Strict Mode).
   - [x] Configure Tailwind CSS v4.
   - [x] Install shadcn/ui machinery.
-- [ ] **Internationalization Setup**:
+- [x] **Internationalization Setup**:
   - [x] Install `next-intl` (package installed).
-  - [ ] Configure middleware for locale detection (`/en`, `/ar`).
-  - [ ] Create base dictionary files.
-  - [ ] Test RTL switching (layout flipping).
-- [ ] **Database & Backend Sync**:
-  - [ ] Setup Convex (Database & Backend).
-  - [ ] Initialize Convex project.
-  - [ ] Define `users` table schema in `convex/schema.ts`.
-  - [ ] Setup Convex React ClientProvider.
+  - [x] Configure middleware for locale detection (`/en`, `/ar`).
+  - [x] Create base dictionary files (en.json, ar.json).
+  - [x] Test RTL switching (layout flipping) - verified working.
+- [x] **Database & Backend Sync**:
+  - [x] Setup Convex (Database & Backend).
+  - [x] Initialize Convex project.
+  - [x] Define `users` table schema in `convex/schema.ts`.
+  - [x] Setup Convex React ClientProvider.
 - [x] **Authentication**:
   - [x] Integrate Clerk (conditional wrapper implemented).
   - [x] Setup placeholder sign-in/sign-up pages (styled).
@@ -32,8 +32,9 @@ This document outlines the step-by-step execution plan for the "From Nope To Web
   - [x] Create glass effects, glow utilities, and gradient components.
 - [x] **Marketing Pages**:
   - [x] **Landing Page**: Hero section, Features, Courses preview, CTA section.
-    - _Implemented: High-end aesthetics, animated gradients, staggered animations._
-  - [ ] **About Page**.
+    - _Implemented: Editorial Codex aesthetic, serif + mono typography, vermillion accents._
+  - [x] **About Page**: Hero, Story, Values, Timeline, Creator sections.
+    - _Implemented: Full page with animated sections, bilingual support._
 - [x] **Dashboard Layout**:
   - [x] Create the authenticated user shell with collapsible sidebar.
   - [x] Sidebar navigation with icons (Overview, My Courses, Progress, AI Tutor, Settings).
@@ -41,15 +42,15 @@ This document outlines the step-by-step execution plan for the "From Nope To Web
 
 ## Phase 3: Course Engine (Day 5-8)
 
-- [ ] **Content Modeling**:
-  - [ ] Define schema for `courses`, `modules`, `lessons`.
-  - [ ] Create seed script to populate initial content.
-- [ ] **Course Viewer UI**:
-  - [ ] Sidebar for module navigation.
-  - [ ] Main content area for MDX rendering.
-  - [ ] "Next Lesson" / "Previous Lesson" navigation logic.
+- [x] **Content Modeling**:
+  - [x] Define schema for `courses`, `modules`, `lessons`.
+  - [x] Create seed script to populate initial content.
+- [x] **Course Viewer UI**:
+  - [x] Sidebar for module navigation.
+  - [x] Main content area for markdown rendering.
+  - [x] "Next Lesson" / "Previous Lesson" navigation logic.
 - [ ] **Progress Tracking**:
-  - [ ] Backend API to mark lesson as complete.
+  - [x] Backend API to mark lesson as complete.
   - [ ] Visual progress bars on Dashboard and Course Viewer.
 
 ## Phase 4: Interactive Coding (Day 9-12)
@@ -88,11 +89,11 @@ This document outlines the step-by-step execution plan for the "From Nope To Web
 
 | Component        | Location                                              | Description                                                |
 | ---------------- | ----------------------------------------------------- | ---------------------------------------------------------- |
-| Design System    | `src/styles/globals.css`                              | Premium dark/light theme with electric cyan/violet palette |
+| Design System    | `src/styles/globals.css`                              | Editorial Codex - warm cream, charcoal, vermillion accents |
 | Navbar           | `src/components/layout/Navbar.tsx`                    | Animated, scroll-responsive with mobile menu               |
 | Footer           | `src/components/layout/Footer.tsx`                    | Full footer with links and social icons                    |
 | Hero Section     | `src/components/features/landing/HeroSection.tsx`     | Animated hero with code preview                            |
-| Features Section | `src/components/features/landing/FeaturesSection.tsx` | 6 feature cards with icons                                 |
+| Features Section | `src/components/features/landing/FeaturesSection.tsx` | 4 feature cards with number indicators                     |
 | Courses Section  | `src/components/features/landing/CoursesSection.tsx`  | 4 course cards with bilingual titles                       |
 | CTA Section      | `src/components/features/landing/CTASection.tsx`      | Conversion-focused call to action                          |
 | Landing Page     | `src/app/page.tsx`                                    | Assembled marketing page                                   |
@@ -100,10 +101,10 @@ This document outlines the step-by-step execution plan for the "From Nope To Web
 | Dashboard Page   | `src/app/dashboard/page.tsx`                          | Stats, courses, AI tutor CTA                               |
 | Sign In Page     | `src/app/sign-in/[[...sign-in]]/page.tsx`             | Placeholder auth page                                      |
 | Sign Up Page     | `src/app/sign-up/[[...sign-up]]/page.tsx`             | Placeholder auth page                                      |
+| About Page       | `src/app/[locale]/about/page.tsx`                     | Full about page with Timeline, Values, Creator sections    |
 
 ### Next Steps
 
-1. Configure Clerk API keys in `.env`
-2. Setup Convex backend
-3. Implement i18n middleware and locale routing
-4. Build course viewer components
+1. Configure Clerk API keys in `.env` (Done)
+2. Build course viewer components
+3. Implement code editor with Sandpack
