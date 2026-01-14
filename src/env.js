@@ -3,38 +3,52 @@ import { z } from "zod";
 
 export const env = createEnv({
   /**
-   * Specify your server-side environment variables schema here. This way you can ensure the app
-   * isn't built with invalid env vars.
+   * Server-side environment variables schema.
+   * These are validated at build time.
    */
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
+    // Clerk server-side key (required for API routes)
+    CLERK_SECRET_KEY: z.string().optional(),
   },
 
   /**
-   * Specify your client-side environment variables schema here. This way you can ensure the app
-   * isn't built with invalid env vars. To expose them to the client, prefix them with
-   * `NEXT_PUBLIC_`.
+   * Client-side environment variables schema.
+   * Prefix with NEXT_PUBLIC_ to expose to the client.
    */
   client: {
-    // NEXT_PUBLIC_CLIENTVAR: z.string(),
+    // Clerk publishable key (required for client-side auth)
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().optional(),
+    // Clerk sign-in/sign-up redirect URLs
+    NEXT_PUBLIC_CLERK_SIGN_IN_URL: z.string().default("/sign-in"),
+    NEXT_PUBLIC_CLERK_SIGN_UP_URL: z.string().default("/sign-up"),
+    NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: z.string().default("/dashboard"),
+    NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: z.string().default("/dashboard"),
   },
 
   /**
-   * You can't destruct `process.env` as a regular object in the Next.js edge runtimes (e.g.
-   * middlewares) or client-side so we need to destruct manually.
+   * Manual destructuring for Edge runtimes and client-side.
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
-    // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+    CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
+      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_CLERK_SIGN_IN_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL,
+    NEXT_PUBLIC_CLERK_SIGN_UP_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL,
+    NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL:
+      process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL,
+    NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL:
+      process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL,
   },
+
   /**
-   * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
-   * useful for Docker builds.
+   * Skip validation for Docker builds or when explicitly requested.
    */
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
+
   /**
-   * Makes it so that empty strings are treated as undefined. `SOME_VAR: z.string()` and
-   * `SOME_VAR=''` will throw an error.
+   * Treat empty strings as undefined.
    */
   emptyStringAsUndefined: true,
 });
