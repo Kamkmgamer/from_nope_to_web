@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { query } from "./_generated/server";
 import type { QueryCtx } from "./_generated/server";
+import type { Id } from "./_generated/dataModel";
 
 /**
  * User statistics interface for getUserStats query
@@ -124,10 +125,10 @@ export const getUserStats = query({
 
       // Get all published lessons for this course
       const allLessons: { _id: string }[] = [];
-      for (const module of modules) {
+      for (const courseModule of modules) {
         const lessons = await ctx.db
           .query("lessons")
-          .withIndex("by_module", (q) => q.eq("moduleId", module._id))
+          .withIndex("by_module", (q) => q.eq("moduleId", courseModule._id))
           .filter((q) => q.eq(q.field("isPublished"), true))
           .collect();
         allLessons.push(...lessons);
@@ -226,10 +227,10 @@ export const getUserCourses = query({
         estimatedMinutes: number | null;
       }> = [];
 
-      for (const module of modules) {
+      for (const courseModule of modules) {
         const lessons = await ctx.db
           .query("lessons")
-          .withIndex("by_module_order", (q) => q.eq("moduleId", module._id))
+          .withIndex("by_module_order", (q) => q.eq("moduleId", courseModule._id))
           .filter((q) => q.eq(q.field("isPublished"), true))
           .collect();
         allLessons.push(
@@ -430,8 +431,8 @@ export const getContinueLearning = query({
 
     // Get the most recently started incomplete lesson
     const mostRecent = incompleteProgress[0];
+    if (!mostRecent) return null;
 
-    // Get the lesson details
     const lesson = await ctx.db.get(mostRecent.lessonId);
     if (!lesson) return null;
 
@@ -653,7 +654,7 @@ async function calculateLearningTime(
   for (const progress of progressEntries) {
     if (progress.status !== "completed") continue;
 
-    const lesson = await ctx.db.get(progress.lessonId as string as any);
+    const lesson = await ctx.db.get(progress.lessonId as unknown as Id<"lessons">);
     if (lesson && "estimatedMinutes" in lesson && lesson.estimatedMinutes) {
       totalMinutes += lesson.estimatedMinutes;
     }
