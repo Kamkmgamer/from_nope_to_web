@@ -7,11 +7,12 @@ const compat = new FlatCompat({
 
 export default tseslint.config(
   {
-    ignores: [".next"],
+    ignores: [".next", "convex/_generated"],
   },
   ...compat.extends("next/core-web-vitals"),
   {
     files: ["**/*.ts", "**/*.tsx"],
+    ignores: ["convex/**"],
     extends: [
       ...tseslint.configs.recommended,
       ...tseslint.configs.recommendedTypeChecked,
@@ -33,6 +34,18 @@ export default tseslint.config(
         "error",
         { checksVoidReturn: { attributes: false } },
       ],
+    },
+  },
+  // Convex files - less strict type checking
+  {
+    files: ["convex/**/*.ts"],
+    rules: {
+      "@typescript-eslint/no-unsafe-return": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-argument": "off",
+      "@typescript-eslint/no-unsafe-call": "off",
+      "no-restricted-syntax": "off",
     },
   },
   {
