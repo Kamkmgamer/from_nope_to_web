@@ -1,0 +1,200 @@
+{
+  "navigation": {
+    "home": "Home",
+    "features": "Features",
+    "roadmap": "Roadmap",
+    "about": "About",
+    "getStarted": "Get Started"
+  },
+  "hero": {
+    "label": "Bilingual Web Development Education",
+    "titlePrefix": "From",
+    "titleNope": "Nope",
+    "titleMiddle": "to",
+    "titleHighlight": "Web Developer",
+    "subtitle": "A structured path from complete beginner to confident full-stack developer. Learn React, Next.js, and the T3 stack.",
+    "english": "English",
+    "arabic": "العربية",
+    "ctaPrimary": "Start Learning",
+    "ctaSecondary": "View Roadmap",
+    "codePreview": {
+      "label": "Your first component",
+      "comment": "// lesson-01.tsx"
+    }
+  },
+  "features": {
+    "label": "What you get",
+    "title": "Tools for {highlight} learning",
+    "highlight": "serious",
+    "items": {
+      "interactive": {
+        "title": "Interactive Coding",
+        "description": "Write and execute code directly in your browser. Real-time feedback as you learn."
+      },
+      "ai": {
+        "title": "AI Tutor",
+        "description": "Context-aware assistance that understands your current lesson and code."
+      },
+      "bilingual": {
+        "title": "Bilingual",
+        "description": "Full Arabic and English support. RTL layouts, localized content."
+      },
+      "structured": {
+        "title": "Structured Path",
+        "description": "From HTML basics to advanced T3 stack. Clear progression, no guesswork."
+      }
+    }
+  },
+  "courses": {
+    "label": "Roadmap",
+    "title": "Four modules from {zero} to {production}",
+    "zero": "zero",
+    "production": "production",
+    "subtitle": "A structured curriculum designed to take you from complete beginner to confident full-stack developer.",
+    "launchingSoon": "Courses launching soon",
+    "levels": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "items": {
+      "foundations": {
+        "title": "Web Foundations",
+        "description": "HTML, CSS, and JavaScript from scratch."
+      },
+      "react": {
+        "title": "React Mastery",
+        "description": "Modern UI development with React 19."
+      },
+      "nextjs": {
+        "title": "Next.js & Full-Stack",
+        "description": "Production apps with Next.js 15."
+      },
+      "t3": {
+        "title": "T3 Stack",
+        "description": "Type-safe full-stack development."
+      }
+    }
+  },
+  "cta": {
+    "title": "Ready to start your journey?",
+    "subtitle": "Join our mailing list to be notified when we launch. Free access for early subscribers.",
+    "button": "Get Started",
+    "freeToStart": "Free to start • No credit card required",
+    "languages": "Arabic + English"
+  },
+  "about": {
+    "backToHome": "Back to Home",
+    "hero": {
+      "title": "Teaching the {highlight} in two languages",
+      "highlight": "modern web",
+      "subtitle": "From Nope→Web exists because learning to code shouldn't require knowing English first. We're building the bridge between Arabic-speaking beginners and the global developer community."
+    },
+    "story": {
+      "label": "The Story",
+      "paragraph1": "I started coding because someone took the time to explain things in a way that made sense. That moment of clarity, where confusion transforms into understanding, is what we're chasing.",
+      "paragraph2": "For millions of Arabic speakers, that moment is harder to reach. Not because the concepts are too difficult, but because the resources assume English fluency. Technical documentation, tutorials, error messages, all in a language that adds an extra layer of difficulty.",
+      "paragraph3": "From Nope→Web is our answer to this challenge. A structured, bilingual curriculum that treats Arabic and English as first-class languages. No second-rate translations. No afterthoughts. Just clear, progressive education in the language you think in."
+    },
+    "values": {
+      "label": "Our Values",
+      "title": "Principles that {highlight} our teaching",
+      "highlight": "guide",
+      "items": {
+        "clarity": {
+          "title": "Clarity Over Complexity",
+          "description": "We break down complex concepts into digestible, progressive lessons. No jargon barriers."
+        },
+        "bilingual": {
+          "title": "Bilingual by Design",
+          "description": "True Arabic and English support, not translations, but native educational experiences in both languages."
+        },
+        "practice": {
+          "title": "Practice Over Theory",
+          "description": "Every lesson includes hands-on coding. Build real projects, not toy examples."
+        },
+        "production": {
+          "title": "Production-Ready Skills",
+          "description": "Learn the tools and patterns used in actual production environments, T3 Stack, Next.js, and more."
+        }
+      }
+    },
+    "timeline": {
+      "label": "Timeline",
+      "title": "Building the {highlight} of coding education",
+      "highlight": "future",
+      "items": {
+        "concept": {
+          "year": "2024",
+          "event": "Concept Born",
+          "description": "Identified the gap in bilingual web development education."
+        },
+        "curriculum": {
+          "year": "2025",
+          "event": "Curriculum Design",
+          "description": "Structured learning path from HTML to T3 Stack."
+        },
+        "launch": {
+          "year": "2026",
+          "event": "Platform Launch",
+          "description": "Interactive courses with AI-powered assistance."
+        }
+      }
+    },
+    "creator": {
+      "label": "The Creator",
+      "name": "KamkmGamer",
+      "role": "Full-Stack Developer",
+      "bio": "A developer passionate about making technology accessible. Building tools and educational content that bridges the gap between Arabic and English in the tech world."
+    }
+  },
+  "footer": {
+    "description": "The bilingual platform for mastering modern full-stack development. From \"I don't know where to start\" to building production apps.",
+    "navigation": "Navigation",
+    "legal": "Legal",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "copyright": "© {year} KamkmGamer"
+  },
+  "auth": {
+    "backToHome": "Back to home",
+    "setupRequired": "Authentication Setup Required",
+    "setupMessage": "This page will display the Clerk {component} component once you configure your Clerk API keys in the .env file.",
+    "signIn": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to continue your learning journey",
+      "submitEmail": "Sign in with Email",
+      "submitGoogle": "Sign in with Google",
+      "submitGithub": "Sign in with GitHub",
+      "noAccount": "Don't have an account?",
+      "signUpLink": "Sign up"
+    },
+    "signUp": {
+      "title": "Start your journey",
+      "subtitle": "Create an account to begin learning web development",
+      "submitEmail": "Sign up with Email",
+      "submitGoogle": "Sign up with Google",
+      "submitGithub": "Sign up with GitHub",
+      "hasAccount": "Already have an account?",
+      "signInLink": "Sign in"
+    }
+  },
+  "dashboard": {
+    "sidebar": {
+      "overview": "Overview",
+      "courses": "Courses",
+      "tutor": "AI Tutor",
+      "settings": "Settings"
+    },
+    "home": {
+      "label": "Dashboard",
+      "title": "Welcome back",
+      "subtitle": "Your learning journey starts here.",
+      "startLearning": "Start Learning",
+      "comingSoon": "Coming Soon",
+      "needHelp": "Need help?",
+      "needHelpSubtitle": "Ask the AI Tutor for instant, context-aware assistance.",
+      "openTutor": "Open Tutor"
+    }
+  }
+}
