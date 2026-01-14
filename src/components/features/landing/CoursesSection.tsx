@@ -1,59 +1,63 @@
 "use client";
 
 import { motion } from "framer-motion";
-
-const courses = [
-  {
-    number: "I",
-    title: "Web Foundations",
-    titleAr: "أساسيات الويب",
-    description: "HTML, CSS, and JavaScript from scratch.",
-    topics: ["HTML5", "CSS3", "JavaScript ES6+", "Responsive Design"],
-    level: "Beginner",
-  },
-  {
-    number: "II",
-    title: "React Mastery",
-    titleAr: "احتراف ريأكت",
-    description: "Modern UI development with React 19.",
-    topics: ["Components", "Hooks", "State", "Performance"],
-    level: "Intermediate",
-  },
-  {
-    number: "III",
-    title: "Next.js & Full-Stack",
-    titleAr: "نكست.جي.أس",
-    description: "Production apps with Next.js 15.",
-    topics: ["App Router", "Server Components", "API Routes", "Deployment"],
-    level: "Advanced",
-  },
-  {
-    number: "IV",
-    title: "T3 Stack",
-    titleAr: "تي٣ ستاك",
-    description: "Type-safe full-stack development.",
-    topics: ["tRPC", "Drizzle", "PostgreSQL", "TypeScript"],
-    level: "Advanced",
-  },
-];
+import { useTranslations } from "next-intl";
 
 export function CoursesSection() {
+  const t = useTranslations("courses");
+
+  const courses = [
+    {
+      number: "I",
+      title: t("items.foundations.title"),
+      description: t("items.foundations.description"),
+      topics: ["HTML5", "CSS3", "JavaScript ES6+", "Responsive Design"],
+      level: t("levels.beginner"),
+    },
+    {
+      number: "II",
+      title: t("items.react.title"),
+      description: t("items.react.description"),
+      topics: ["Components", "Hooks", "State", "Performance"],
+      level: t("levels.intermediate"),
+    },
+    {
+      number: "III",
+      title: t("items.nextjs.title"),
+      description: t("items.nextjs.description"),
+      topics: ["App Router", "Server Components", "API Routes", "Deployment"],
+      level: t("levels.advanced"),
+    },
+    {
+      number: "IV",
+      title: t("items.t3.title"),
+      description: t("items.t3.description"),
+      topics: ["tRPC", "Drizzle", "PostgreSQL", "TypeScript"],
+      level: t("levels.advanced"),
+    },
+  ];
+
   return (
     <section id="roadmap" className="border-border border-t py-24">
       <div className="container-editorial">
         {/* Section header */}
         <div className="mb-16 grid grid-cols-1 gap-12 lg:grid-cols-12">
           <div className="lg:col-span-4">
-            <span className="label-mono">Roadmap</span>
+            <span className="label-mono">{t("label")}</span>
           </div>
           <div className="lg:col-span-8">
             <h2 className="max-w-lg">
-              Four modules from <span className="accent-underline">zero</span>{" "}
-              to <span className="accent-underline">production</span>
+              {t.rich("title", {
+                zero: () => (
+                  <span className="accent-underline">{t("zero")}</span>
+                ),
+                production: () => (
+                  <span className="accent-underline">{t("production")}</span>
+                ),
+              })}
             </h2>
             <p className="text-muted-foreground mt-4 max-w-md">
-              A structured curriculum designed to take you from complete
-              beginner to confident full-stack developer.
+              {t("subtitle")}
             </p>
           </div>
         </div>
@@ -83,9 +87,6 @@ export function CoursesSection() {
                     <h3 className="text-xl lg:text-2xl">{course.title}</h3>
                     <span className="tag">{course.level}</span>
                   </div>
-                  <p className="text-muted-foreground mb-3 text-sm" dir="rtl">
-                    {course.titleAr}
-                  </p>
                   <p className="text-muted-foreground">{course.description}</p>
                 </div>
 
@@ -106,7 +107,7 @@ export function CoursesSection() {
 
         {/* Coming soon note */}
         <div className="mt-12 text-center">
-          <span className="label-mono">Courses launching soon</span>
+          <span className="label-mono">{t("launchingSoon")}</span>
         </div>
       </div>
     </section>

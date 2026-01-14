@@ -1,47 +1,49 @@
 "use client";
 
 import { motion } from "framer-motion";
-
-const features = [
-  {
-    number: "01",
-    title: "Interactive Coding",
-    description:
-      "Write and execute code directly in your browser. Real-time feedback as you learn.",
-  },
-  {
-    number: "02",
-    title: "AI Tutor",
-    description:
-      "Context-aware assistance that understands your current lesson and code.",
-  },
-  {
-    number: "03",
-    title: "Bilingual",
-    description:
-      "Full Arabic and English support. RTL layouts, localized content.",
-  },
-  {
-    number: "04",
-    title: "Structured Path",
-    description:
-      "From HTML basics to advanced T3 stack. Clear progression, no guesswork.",
-  },
-];
+import { useTranslations } from "next-intl";
 
 export function FeaturesSection() {
+  const t = useTranslations("features");
+
+  const features = [
+    {
+      number: "01",
+      title: t("items.interactive.title"),
+      description: t("items.interactive.description"),
+    },
+    {
+      number: "02",
+      title: t("items.ai.title"),
+      description: t("items.ai.description"),
+    },
+    {
+      number: "03",
+      title: t("items.bilingual.title"),
+      description: t("items.bilingual.description"),
+    },
+    {
+      number: "04",
+      title: t("items.structured.title"),
+      description: t("items.structured.description"),
+    },
+  ];
+
   return (
     <section id="features" className="border-border border-t py-24">
       <div className="container-editorial">
         {/* Section header */}
         <div className="mb-16 grid grid-cols-1 gap-12 lg:grid-cols-12">
           <div className="lg:col-span-4">
-            <span className="label-mono">What you get</span>
+            <span className="label-mono">{t("label")}</span>
           </div>
           <div className="lg:col-span-8">
             <h2 className="max-w-lg">
-              Tools for <span className="accent-underline">serious</span>{" "}
-              learning
+              {t.rich("title", {
+                highlight: () => (
+                  <span className="accent-underline">{t("highlight")}</span>
+                ),
+              })}
             </h2>
           </div>
         </div>
