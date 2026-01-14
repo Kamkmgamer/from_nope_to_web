@@ -1,6 +1,12 @@
+"use client";
+
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export function Footer() {
+  const t = useTranslations("footer");
+  const tNav = useTranslations("navigation");
+
   return (
     <footer className="border-border border-t py-16">
       <div className="container-editorial">
@@ -13,22 +19,20 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-muted-foreground max-w-sm text-sm">
-              The bilingual platform for mastering modern full-stack
-              development. From &quot;I don&apos;t know where to start&quot; to
-              building production apps.
+              {t("description")}
             </p>
           </div>
 
           {/* Navigation */}
           <div className="md:col-span-3">
-            <span className="label-mono mb-4 block">Navigation</span>
+            <span className="label-mono mb-4 block">{t("navigation")}</span>
             <ul className="space-y-3">
               <li>
                 <Link
                   href="#features"
                   className="text-muted-foreground hover:text-foreground text-sm transition-colors"
                 >
-                  Features
+                  {tNav("features")}
                 </Link>
               </li>
               <li>
@@ -36,7 +40,15 @@ export function Footer() {
                   href="#roadmap"
                   className="text-muted-foreground hover:text-foreground text-sm transition-colors"
                 >
-                  Roadmap
+                  {tNav("roadmap")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/about"
+                  className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                >
+                  {tNav("about")}
                 </Link>
               </li>
             </ul>
@@ -44,14 +56,14 @@ export function Footer() {
 
           {/* Legal */}
           <div className="md:col-span-3">
-            <span className="label-mono mb-4 block">Legal</span>
+            <span className="label-mono mb-4 block">{t("legal")}</span>
             <ul className="space-y-3">
               <li>
                 <Link
                   href="/privacy"
                   className="text-muted-foreground hover:text-foreground text-sm transition-colors"
                 >
-                  Privacy
+                  {t("privacy")}
                 </Link>
               </li>
               <li>
@@ -59,7 +71,7 @@ export function Footer() {
                   href="/terms"
                   className="text-muted-foreground hover:text-foreground text-sm transition-colors"
                 >
-                  Terms
+                  {t("terms")}
                 </Link>
               </li>
             </ul>
@@ -69,7 +81,7 @@ export function Footer() {
         {/* Bottom */}
         <div className="border-border mt-16 border-t pt-8">
           <p className="text-muted-foreground font-mono text-xs tracking-wider uppercase">
-            © {new Date().getFullYear()} KamkmGamer
+            {t("copyright", { year: new Date().getFullYear() })}
           </p>
         </div>
       </div>

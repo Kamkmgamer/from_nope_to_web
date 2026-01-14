@@ -1,18 +1,22 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import { Link } from "~/i18n/navigation";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-
-const navLinks = [
-  { href: "#features", label: "Features" },
-  { href: "#roadmap", label: "Roadmap" },
-];
+import { useTranslations } from "next-intl";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function Navbar() {
+  const t = useTranslations("navigation");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const navLinks = [
+    { href: "/#features", label: t("features") },
+    { href: "/#roadmap", label: t("roadmap") },
+    { href: "/about", label: t("about") },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -53,6 +57,7 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
+            <LanguageSwitcher />
           </div>
 
           {/* CTA */}
@@ -61,7 +66,7 @@ export function Navbar() {
               href="/sign-up"
               className="hover:text-primary font-mono text-xs tracking-wider uppercase transition-colors"
             >
-              Get Started →
+              {t("getStarted")} →
             </Link>
           </div>
 
@@ -98,13 +103,16 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
+            <div className="py-2">
+              <LanguageSwitcher />
+            </div>
             <div className="border-border border-t pt-6">
               <Link
                 href="/sign-up"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="btn-primary inline-flex"
               >
-                Get Started
+                {t("getStarted")}
               </Link>
             </div>
           </nav>
