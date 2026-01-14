@@ -24,8 +24,7 @@
   },
   "features": {
     "label": "What you get",
-    "title": "Tools for {highlight} learning",
-    "highlight": "serious",
+    "title": "Tools for <highlight>serious</highlight> learning",
     "items": {
       "interactive": {
         "title": "Interactive Coding",
@@ -47,9 +46,7 @@
   },
   "courses": {
     "label": "Roadmap",
-    "title": "Four modules from {zero} to {production}",
-    "zero": "zero",
-    "production": "production",
+    "title": "Four modules from <zero>zero</zero> to <production>production</production>",
     "subtitle": "A structured curriculum designed to take you from complete beginner to confident full-stack developer.",
     "launchingSoon": "Courses launching soon",
     "levels": {
@@ -86,8 +83,7 @@
   "about": {
     "backToHome": "Back to Home",
     "hero": {
-      "title": "Teaching the {highlight} in two languages",
-      "highlight": "modern web",
+      "title": "Teaching the <highlight>modern web</highlight> in two languages",
       "subtitle": "From Nope→Web exists because learning to code shouldn't require knowing English first. We're building the bridge between Arabic-speaking beginners and the global developer community."
     },
     "story": {
@@ -98,8 +94,7 @@
     },
     "values": {
       "label": "Our Values",
-      "title": "Principles that {highlight} our teaching",
-      "highlight": "guide",
+      "title": "Principles that <highlight>guide</highlight> our teaching",
       "items": {
         "clarity": {
           "title": "Clarity Over Complexity",
@@ -121,8 +116,7 @@
     },
     "timeline": {
       "label": "Timeline",
-      "title": "Building the {highlight} of coding education",
-      "highlight": "future",
+      "title": "Building the <highlight>future</highlight> of coding education",
       "items": {
         "concept": {
           "year": "2024",

@@ -24,8 +24,7 @@
   },
   "features": {
     "label": "ما ستحصل عليه",
-    "title": "أدوات للتعلم {highlight}",
-    "highlight": "الجاد",
+    "title": "أدوات للتعلم <highlight>الجاد</highlight>",
     "items": {
       "interactive": {
         "title": "برمجة تفاعلية",
@@ -47,9 +46,7 @@
   },
   "courses": {
     "label": "خارطة الطريق",
-    "title": "أربع وحدات من {zero} إلى {production}",
-    "zero": "الصفر",
-    "production": "الإنتاج",
+    "title": "أربع وحدات من <zero>الصفر</zero> إلى <production>الإنتاج</production>",
     "subtitle": "منهج منظم مصمم لنقلك من مبتدئ كامل إلى مطور متكامل واثق.",
     "launchingSoon": "الدورات قريباً",
     "levels": {
@@ -86,8 +83,7 @@
   "about": {
     "backToHome": "العودة للرئيسية",
     "hero": {
-      "title": "تعليم {highlight} بلغتين",
-      "highlight": "الويب الحديث",
+      "title": "تعليم <highlight>الويب الحديث</highlight> بلغتين",
       "subtitle": "Nope→Web موجود لأن تعلم البرمجة لا يجب أن يتطلب معرفة الإنجليزية أولاً. نحن نبني الجسر بين المبتدئين الناطقين بالعربية ومجتمع المطورين العالمي."
     },
     "story": {
@@ -98,8 +94,7 @@
     },
     "values": {
       "label": "قيمنا",
-      "title": "مبادئ {highlight} تعليمنا",
-      "highlight": "توجه",
+      "title": "مبادئ <highlight>توجه</highlight> تعليمنا",
       "items": {
         "clarity": {
           "title": "الوضوح فوق التعقيد",
@@ -121,8 +116,7 @@
     },
     "timeline": {
       "label": "الجدول الزمني",
-      "title": "بناء {highlight} تعليم البرمجة",
-      "highlight": "مستقبل",
+      "title": "بناء <highlight>مستقبل</highlight> تعليم البرمجة",
       "items": {
         "concept": {
           "year": "2024",
