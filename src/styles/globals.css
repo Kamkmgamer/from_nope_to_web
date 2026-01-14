@@ -350,3 +350,19 @@
   .stagger-4 { animation-delay: 0.2s; opacity: 0; }
   .stagger-5 { animation-delay: 0.25s; opacity: 0; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DASHBOARD LAYOUT - Sidebar offset (outside @layer for guaranteed inclusion)
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (min-width: 1024px) {
+  .dashboard-content-ltr {
+    padding-left: calc(16rem + 2rem) !important; /* sidebar width (256px) + extra padding */
+    padding-right: 2rem !important;
+  }
+  
+  .dashboard-content-rtl {
+    padding-right: calc(16rem + 2rem) !important; /* sidebar width (256px) + extra padding */
+    padding-left: 2rem !important;
+  }
+}
+
