@@ -3,8 +3,11 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function HeroSection() {
+  const t = useTranslations("hero");
+
   return (
     <section className="flex min-h-screen flex-col justify-center py-24">
       <div className="container-editorial">
@@ -15,9 +18,7 @@ export function HeroSection() {
           transition={{ duration: 0.6 }}
           className="mb-12"
         >
-          <span className="label-mono">
-            Bilingual Web Development Education
-          </span>
+          <span className="label-mono">{t("label")}</span>
         </motion.div>
 
         {/* Main headline - Editorial style */}
@@ -27,9 +28,12 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.1 }}
           className="mb-8 max-w-4xl"
         >
-          From{" "}
-          <span className="line-through decoration-2 opacity-40">Nope</span> to{" "}
-          <span className="accent-underline">Web Developer</span>
+          {t("titlePrefix")}{" "}
+          <span className="line-through decoration-2 opacity-40">
+            {t("titleNope")}
+          </span>{" "}
+          {t("titleMiddle")}{" "}
+          <span className="accent-underline">{t("titleHighlight")}</span>
         </motion.h1>
 
         {/* Subheadline */}
@@ -39,10 +43,14 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-muted-foreground mb-12 max-w-xl text-lg"
         >
-          A structured path from complete beginner to confident full-stack
-          developer. Learn React, Next.js, and the T3 stack—in{" "}
-          <span className="text-foreground">English</span> and{" "}
-          <span className="text-foreground">العربية</span>.
+          {t.rich("subtitle", {
+            english: () => (
+              <span className="text-foreground">{t("english")}</span>
+            ),
+            arabic: () => (
+              <span className="text-foreground">{t("arabic")}</span>
+            ),
+          })}
         </motion.p>
 
         {/* CTA */}
@@ -53,11 +61,11 @@ export function HeroSection() {
           className="flex flex-wrap gap-4"
         >
           <Link href="/sign-up" className="btn-primary">
-            Start Learning
+            {t("ctaPrimary")}
             <ArrowRight className="size-4" />
           </Link>
           <Link href="#roadmap" className="btn-secondary">
-            View Roadmap
+            {t("ctaSecondary")}
           </Link>
         </motion.div>
 
@@ -66,7 +74,7 @@ export function HeroSection() {
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-24 origin-left"
+          className="mt-24 origin-left rtl:origin-right"
         >
           <div className="divider-thick max-w-xs" />
         </motion.div>
@@ -79,11 +87,11 @@ export function HeroSection() {
           className="mt-16 max-w-2xl"
         >
           <div className="card-editorial p-6">
-            <div className="label-mono mb-4">Your first component</div>
-            <pre className="overflow-x-auto text-sm leading-relaxed">
+            <div className="label-mono mb-4">{t("codePreview.label")}</div>
+            <pre className="overflow-x-auto text-sm leading-relaxed" dir="ltr">
               <code>
                 <span className="text-muted-foreground">
-                  {"// lesson-01.tsx"}
+                  {t("codePreview.comment")}
                 </span>
                 {"\n\n"}
                 <span className="text-primary">export function</span>{" "}
