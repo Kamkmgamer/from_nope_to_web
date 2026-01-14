@@ -1,22 +1,5 @@
-import { Navbar, Footer } from "~/components/layout";
-import {
-  HeroSection,
-  FeaturesSection,
-  CoursesSection,
-  CTASection,
-} from "~/components/features/landing";
+import { redirect } from "next/navigation";
 
-export default function LandingPage() {
-  return (
-    <>
-      <Navbar />
-      <main>
-        <HeroSection />
-        <FeaturesSection />
-        <CoursesSection />
-        <CTASection />
-      </main>
-      <Footer />
-    </>
-  );
+export default function RootPage() {
+  redirect("/en");
 }
