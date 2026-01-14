@@ -40,8 +40,8 @@ export function FeaturesSection() {
           <div className="lg:col-span-8">
             <h2 className="max-w-lg">
               {t.rich("title", {
-                highlight: () => (
-                  <span className="accent-underline">{t("highlight")}</span>
+                highlight: (chunks) => (
+                  <span className="accent-underline">{chunks}</span>
                 ),
               })}
             </h2>
