@@ -9,6 +9,7 @@ export default function AdminDashboard() {
   const courses = useQuery(api.courses.listAll);
   const deleteCourse = useMutation(api.courses.remove);
   const togglePublish = useMutation(api.courses.update);
+  const createCourse = useMutation(api.courses.create);
 
   // Local state for basic course editing (could be a modal in V2)
   const [isCreating, setIsCreating] = useState(false);
@@ -115,20 +116,134 @@ export default function AdminDashboard() {
       {/* Simple Create Modal Placeholder - Implementing full edit page next */}
       {isCreating && (
         <div className="bg-background/80 fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-          <div className="bg-card border-border w-full max-w-lg border p-8 shadow-2xl">
-            <h3 className="font-display mb-4 text-2xl">New Course</h3>
-            <p className="text-muted-foreground mb-6">
-              Course creation is handled in the seed script or manually via the
-              specialized editor. Please verify seed status.
-            </p>
-            <div className="flex justify-end">
-              <button
-                onClick={() => setIsCreating(false)}
-                className="border-border hover:bg-muted border px-4 py-2 font-mono text-sm"
-              >
-                Close
-              </button>
-            </div>
+          <div className="bg-card border-border max-h-[90vh] w-full max-w-2xl overflow-y-auto border p-8 shadow-2xl">
+            <h3 className="font-display mb-6 text-2xl">New Course</h3>
+
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+                try {
+                  await createCourse({
+                    titleEn: formData.get("titleEn") as string,
+                    titleAr: formData.get("titleAr") as string,
+                    descriptionEn: formData.get("descriptionEn") as string,
+                    descriptionAr: formData.get("descriptionAr") as string,
+                    slug: formData.get("slug") as string,
+                    order: Number(formData.get("order")),
+                    imageUrl: (formData.get("imageUrl") as string) || undefined,
+                  });
+                  setIsCreating(false);
+                } catch (error) {
+                  console.error("Failed to create course:", error);
+                  alert("Failed to create course. Please check the console.");
+                }
+              }}
+              className="space-y-6"
+            >
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div className="space-y-4">
+                  <h4 className="text-primary border-b pb-2 font-mono text-sm uppercase">
+                    English
+                  </h4>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Title</label>
+                    <input
+                      name="titleEn"
+                      required
+                      className="bg-background border-border w-full border p-2"
+                      placeholder="e.g. Web Foundations"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Description</label>
+                    <textarea
+                      name="descriptionEn"
+                      required
+                      rows={3}
+                      className="bg-background border-border w-full border p-2"
+                      placeholder="Course summary..."
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-4" dir="rtl">
+                  <h4
+                    className="text-primary border-b pb-2 font-mono text-sm uppercase"
+                    dir="ltr"
+                  >
+                    Arabic
+                  </h4>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">العنوان</label>
+                    <input
+                      name="titleAr"
+                      required
+                      className="bg-background border-border w-full border p-2"
+                      placeholder="مثال: أساسيات الويب"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">الوصف</label>
+                    <textarea
+                      name="descriptionAr"
+                      required
+                      rows={3}
+                      className="bg-background border-border w-full border p-2"
+                      placeholder="ملخص الدورة..."
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-border grid grid-cols-1 gap-6 border-t border-dashed pt-4 md:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Slug (URL)</label>
+                  <input
+                    name="slug"
+                    required
+                    className="bg-background border-border w-full border p-2 font-mono text-sm"
+                    placeholder="web-foundations"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Order</label>
+                  <input
+                    name="order"
+                    type="number"
+                    required
+                    defaultValue={1}
+                    className="bg-background border-border w-full border p-2"
+                  />
+                </div>
+                <div className="space-y-2 md:col-span-2">
+                  <label className="text-sm font-medium">
+                    Image URL (Optional)
+                  </label>
+                  <input
+                    name="imageUrl"
+                    className="bg-background border-border w-full border p-2 font-mono text-sm"
+                    placeholder="https://..."
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-6">
+                <button
+                  type="button"
+                  onClick={() => setIsCreating(false)}
+                  className="border-border hover:bg-muted border px-6 py-2 font-mono text-sm transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-primary text-primary-foreground px-6 py-2 font-mono text-sm transition-opacity hover:opacity-90"
+                >
+                  Create Course
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

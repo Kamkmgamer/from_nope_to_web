@@ -22,6 +22,7 @@ export default function EditCoursePage() {
   const createModule = useMutation(api.modules.create);
 
   const [saving, setSaving] = useState(false);
+  const [isCreatingModule, setIsCreatingModule] = useState(false);
 
   // We could use react-hook-form properly here, but for brevity using simple state binding to the query result
   // In a real production app, we would initialize form state with useEffect when 'course' loads.
@@ -63,18 +64,23 @@ export default function EditCoursePage() {
     }
   };
 
-  const handleCreateModule = async () => {
-    const titleEn = prompt("Module Title (English):");
-    if (!titleEn) return;
-    const titleAr = prompt("Module Title (Arabic):");
-    if (!titleAr) return;
+  const handleCreateModule = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
 
-    await createModule({
-      courseId: course._id,
-      titleEn,
-      titleAr,
-      order: modules.length + 1,
-    });
+    try {
+      await createModule({
+        courseId: course._id,
+        titleEn: formData.get("titleEn") as string,
+        titleAr: formData.get("titleAr") as string,
+        order: Number(formData.get("order")),
+        // descriptions are optional in the schema, can add if needed but titles are minimum
+      });
+      setIsCreatingModule(false);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to create module");
+    }
   };
 
   return (
@@ -197,7 +203,7 @@ export default function EditCoursePage() {
         <div className="mb-6 flex items-center justify-between">
           <h3 className="font-display text-2xl">Modules</h3>
           <button
-            onClick={handleCreateModule}
+            onClick={() => setIsCreatingModule(true)}
             type="button"
             className="border-border hover:bg-muted flex items-center gap-2 border px-4 py-2 font-mono text-xs tracking-wider uppercase"
           >
@@ -226,6 +232,57 @@ export default function EditCoursePage() {
           ))}
         </div>
       </div>
+      {/* Create Module Modal */}
+      {isCreatingModule && (
+        <div className="bg-background/80 fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+          <div className="bg-card border-border w-full max-w-lg border p-8 shadow-2xl">
+            <h3 className="font-display mb-4 text-2xl">New Module</h3>
+            <form onSubmit={handleCreateModule} className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Title (English)</label>
+                <input
+                  name="titleEn"
+                  required
+                  className="bg-background border-border w-full border p-2"
+                />
+              </div>
+              <div className="space-y-2" dir="rtl">
+                <label className="text-sm font-medium">العنوان (Arabic)</label>
+                <input
+                  name="titleAr"
+                  required
+                  className="bg-background border-border w-full border p-2"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Order</label>
+                <input
+                  name="order"
+                  type="number"
+                  defaultValue={modules.length + 1}
+                  required
+                  className="bg-background border-border w-full border p-2"
+                />
+              </div>
+              <div className="flex justify-end gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setIsCreatingModule(false)}
+                  className="border-border hover:bg-muted border px-4 py-2 font-mono text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-primary text-primary-foreground px-4 py-2 font-mono text-sm hover:opacity-90"
+                >
+                  Create Module
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

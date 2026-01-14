@@ -22,6 +22,7 @@ export default function EditModulePage() {
   const deleteLesson = useMutation(api.lessons.remove);
 
   const [saving, setSaving] = useState(false);
+  const [isCreatingLesson, setIsCreatingLesson] = useState(false);
 
   if (moduleData === undefined || lessons === undefined) {
     return (
@@ -56,23 +57,30 @@ export default function EditModulePage() {
     }
   };
 
-  const handleCreateLesson = async () => {
-    const titleEn = prompt("Lesson Title (English):");
-    if (!titleEn) return;
+  const handleCreateLesson = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const titleEn = formData.get("titleEn") as string;
     const slug = titleEn
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-|-$/g, "");
 
-    await createLesson({
-      moduleId: moduleData._id,
-      titleEn,
-      titleAr: titleEn, // Placeholder
-      slug,
-      order: lessons.length + 1,
-      contentEn: "# New Lesson",
-      contentAr: "# درس جديد",
-    });
+    try {
+      await createLesson({
+        moduleId: moduleData._id,
+        titleEn,
+        titleAr: (formData.get("titleAr") as string) || titleEn,
+        slug: (formData.get("slug") as string) || slug,
+        order: Number(formData.get("order")),
+        contentEn: "# New Lesson\n\nWrite your content here...",
+        contentAr: "# درس جديد\n\nأكتب المحتوى هنا...",
+      });
+      setIsCreatingLesson(false);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to create lesson");
+    }
   };
 
   return (
@@ -140,7 +148,7 @@ export default function EditModulePage() {
         <div className="flex items-center justify-between">
           <h3 className="font-display text-2xl">Lessons</h3>
           <button
-            onClick={handleCreateLesson}
+            onClick={() => setIsCreatingLesson(true)}
             className="bg-secondary hover:bg-secondary/80 text-secondary-foreground flex items-center gap-2 px-4 py-2 font-mono text-xs tracking-wider uppercase"
           >
             <Plus className="size-4" /> Add Lesson
@@ -188,6 +196,67 @@ export default function EditModulePage() {
           )}
         </div>
       </div>
+      {/* Create Lesson Modal */}
+      {isCreatingLesson && (
+        <div className="bg-background/80 fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+          <div className="bg-card border-border w-full max-w-lg border p-8 shadow-2xl">
+            <h3 className="font-display mb-4 text-2xl">New Lesson</h3>
+            <form onSubmit={handleCreateLesson} className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Title (English)</label>
+                <input
+                  name="titleEn"
+                  required
+                  className="bg-background border-border w-full border p-2"
+                />
+              </div>
+              <div className="space-y-2" dir="rtl">
+                <label className="text-sm font-medium">العنوان (Arabic)</label>
+                <input
+                  name="titleAr"
+                  className="bg-background border-border w-full border p-2"
+                  placeholder="(Optional) Defaults to English"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">
+                  Slug (Optional - Auto-generated)
+                </label>
+                <input
+                  name="slug"
+                  className="bg-background border-border w-full border p-2 font-mono text-xs"
+                  placeholder="my-lesson-slug"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Order</label>
+                <input
+                  name="order"
+                  type="number"
+                  defaultValue={lessons.length + 1}
+                  required
+                  className="bg-background border-border w-full border p-2"
+                />
+              </div>
+              <div className="flex justify-end gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setIsCreatingLesson(false)}
+                  className="border-border hover:bg-muted border px-4 py-2 font-mono text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-primary text-primary-foreground px-4 py-2 font-mono text-sm hover:opacity-90"
+                >
+                  Create Lesson
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
