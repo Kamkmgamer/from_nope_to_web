@@ -33,6 +33,24 @@ export default function AboutPage() {
     },
   ];
 
+  const timeline = [
+    {
+      year: t("timeline.items.concept.year"),
+      event: t("timeline.items.concept.event"),
+      description: t("timeline.items.concept.description"),
+    },
+    {
+      year: t("timeline.items.curriculum.year"),
+      event: t("timeline.items.curriculum.event"),
+      description: t("timeline.items.curriculum.description"),
+    },
+    {
+      year: t("timeline.items.launch.year"),
+      event: t("timeline.items.launch.event"),
+      description: t("timeline.items.launch.description"),
+    },
+  ];
+
   return (
     <>
       <Navbar />
@@ -64,10 +82,8 @@ export default function AboutPage() {
               className="mb-8 max-w-3xl"
             >
               {t.rich("hero.title", {
-                highlight: () => (
-                  <span className="accent-underline">
-                    {t("hero.highlight")}
-                  </span>
+                highlight: (chunks) => (
+                  <span className="accent-underline">{chunks}</span>
                 ),
               })}
             </motion.h1>
@@ -143,10 +159,8 @@ export default function AboutPage() {
               <div className="lg:col-span-8">
                 <h2 className="max-w-lg">
                   {t.rich("values.title", {
-                    highlight: () => (
-                      <span className="accent-underline">
-                        {t("values.highlight")}
-                      </span>
+                    highlight: (chunks) => (
+                      <span className="accent-underline">{chunks}</span>
                     ),
                   })}
                 </h2>
@@ -171,6 +185,62 @@ export default function AboutPage() {
                   </p>
                 </motion.div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Timeline Section */}
+        <section className="border-border border-t py-24">
+          <div className="container-editorial">
+            {/* Section header */}
+            <div className="mb-16 grid grid-cols-1 gap-12 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <span className="label-mono">{t("timeline.label")}</span>
+              </div>
+              <div className="lg:col-span-8">
+                <h2 className="max-w-lg">
+                  {t.rich("timeline.title", {
+                    highlight: (chunks) => (
+                      <span className="accent-underline">{chunks}</span>
+                    ),
+                  })}
+                </h2>
+              </div>
+            </div>
+
+            {/* Timeline items */}
+            <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+              <div className="lg:col-span-4" />
+              <div className="lg:col-span-8">
+                <div className="border-border relative border-l-2 pl-8 lg:pl-12">
+                  {timeline.map((item, index) => (
+                    <motion.div
+                      key={item.year}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true, margin: "-50px" }}
+                      transition={{ duration: 0.5, delay: index * 0.15 }}
+                      className="relative pb-12 last:pb-0"
+                    >
+                      {/* Timeline dot */}
+                      <div className="bg-primary absolute top-0 -left-[calc(0.5rem+9px)] size-4 rounded-full lg:-left-[calc(0.75rem+9px)]" />
+
+                      {/* Year badge */}
+                      <span className="font-display text-primary text-3xl opacity-70">
+                        {item.year}
+                      </span>
+
+                      {/* Event title */}
+                      <h3 className="mt-2 mb-2 text-xl">{item.event}</h3>
+
+                      {/* Description */}
+                      <p className="text-muted-foreground max-w-md text-sm leading-relaxed">
+                        {item.description}
+                      </p>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </section>

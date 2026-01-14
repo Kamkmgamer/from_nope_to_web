@@ -8,6 +8,7 @@ import {
 } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { TRPCReactProvider } from "~/trpc/react";
+import { ConvexClientProvider } from "~/components/providers/ConvexClientProvider";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -52,11 +53,17 @@ function Providers({ children }: { children: React.ReactNode }) {
   if (isClerkConfigured) {
     return (
       <ClerkProvider>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <ConvexClientProvider>
+          <TRPCReactProvider>{children}</TRPCReactProvider>
+        </ConvexClientProvider>
       </ClerkProvider>
     );
   }
-  return <TRPCReactProvider>{children}</TRPCReactProvider>;
+  return (
+    <ConvexClientProvider>
+      <TRPCReactProvider>{children}</TRPCReactProvider>
+    </ConvexClientProvider>
+  );
 }
 
 export default async function LocaleLayout({
