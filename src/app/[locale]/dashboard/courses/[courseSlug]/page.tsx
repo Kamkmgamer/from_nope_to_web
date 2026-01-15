@@ -120,7 +120,7 @@ function StatusIcon({ status }: { status: "completed" | "started" | null }) {
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ type: "spring", stiffness: 200, damping: 15 }}
-        className="flex-shrink-0"
+        className="shrink-0"
       >
         <CheckCircle2 className="text-primary size-5" />
       </motion.div>
@@ -132,7 +132,7 @@ function StatusIcon({ status }: { status: "completed" | "started" | null }) {
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ type: "spring", stiffness: 200, damping: 15 }}
-        className="flex-shrink-0"
+        className="shrink-0"
       >
         <PlayCircle className="text-accent size-5" />
       </motion.div>
@@ -143,7 +143,7 @@ function StatusIcon({ status }: { status: "completed" | "started" | null }) {
       initial={{ scale: 0 }}
       animate={{ scale: 1 }}
       transition={{ type: "spring", stiffness: 200, damping: 15 }}
-      className="flex-shrink-0"
+      className="shrink-0"
     >
       <Circle className="text-muted-foreground size-5" />
     </motion.div>
@@ -251,7 +251,7 @@ function ModuleAccordion({
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.2 }}
-          className="flex-shrink-0 rtl:rotate-180"
+          className="shrink-0 rtl:rotate-180"
         >
           <ChevronDown className="text-muted-foreground size-5" />
         </motion.div>
@@ -296,13 +296,13 @@ function ModuleAccordion({
                         </span>
                         {estimatedTime && (
                           <div className="text-muted-foreground flex items-center gap-1 text-xs">
-                            <Clock className="size-3 flex-shrink-0" />
+                            <Clock className="size-3 shrink-0" />
                             <span className="truncate">{estimatedTime}</span>
                           </div>
                         )}
                       </div>
                     </div>
-                    <div className="flex flex-shrink-0 items-center gap-2">
+                    <div className="flex shrink-0 items-center gap-2">
                       {isNextLesson && (
                         <Button
                           size="sm"
@@ -321,7 +321,7 @@ function ModuleAccordion({
                               `/${locale}/courses/${courseSlug}/${lesson.slug}`,
                             );
                           }}
-                          className="flex-shrink-0"
+                          className="shrink-0"
                         >
                           {isStarted(lesson.status)
                             ? t("continueLesson")
@@ -344,7 +344,7 @@ function ModuleAccordion({
                               `/${locale}/courses/${courseSlug}/${lesson.slug}`,
                             );
                           }}
-                          className="flex-shrink-0"
+                          className="shrink-0"
                         >
                           {isCompleted(lesson.status)
                             ? t("review")
@@ -364,7 +364,7 @@ function ModuleAccordion({
                               `/${locale}/courses/${courseSlug}/${lesson.slug}`,
                             );
                           }}
-                          className="flex-shrink-0"
+                          className="shrink-0"
                         >
                           {t("review")}
                         </Button>

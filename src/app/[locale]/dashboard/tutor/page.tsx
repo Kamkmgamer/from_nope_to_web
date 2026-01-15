@@ -218,7 +218,7 @@ function MessageBubble({
       {/* Avatar */}
       <div
         className={cn(
-          "flex size-8 flex-shrink-0 items-center justify-center rounded-full",
+          "flex size-8 shrink-0 items-center justify-center rounded-full",
           isUser
             ? "bg-primary text-primary-foreground"
             : "bg-secondary text-foreground",
@@ -302,7 +302,7 @@ function LoadingIndicator({ isRTL }: { isRTL: boolean }) {
       )}
     >
       {/* Avatar */}
-      <div className="bg-secondary text-foreground flex size-8 flex-shrink-0 items-center justify-center rounded-full">
+      <div className="bg-secondary text-foreground flex size-8 shrink-0 items-center justify-center rounded-full">
         <Bot className="size-4" />
       </div>
 
@@ -522,7 +522,7 @@ export default function TutorPage() {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="border-foreground/10 flex-shrink-0 border-b px-6 py-4"
+        className="border-foreground/10 shrink-0 border-b px-6 py-4"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -594,7 +594,7 @@ export default function TutorPage() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="border-foreground/10 flex-shrink-0 border-t px-6 py-4"
+        className="border-foreground/10 shrink-0 border-t px-6 py-4"
       >
         <div className="mx-auto flex max-w-4xl gap-3">
           <div className="relative flex-1">
@@ -624,7 +624,7 @@ export default function TutorPage() {
             onClick={handleSendMessage}
             disabled={!inputValue.trim() || isLoading}
             className={cn(
-              "flex size-12 flex-shrink-0 items-center justify-center rounded-lg transition-all duration-300",
+              "flex size-12 shrink-0 items-center justify-center rounded-lg transition-all duration-300",
               inputValue.trim() && !isLoading
                 ? "bg-primary text-primary-foreground hover:bg-primary/90"
                 : "bg-secondary text-muted-foreground cursor-not-allowed",

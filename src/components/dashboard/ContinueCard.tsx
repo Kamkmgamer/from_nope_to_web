@@ -63,7 +63,7 @@ export function ContinueCard({ nextLesson, className }: ContinueCardProps) {
           </div>
 
           {/* Action */}
-          <div className="flex-shrink-0">
+          <div className="shrink-0">
             <span className="btn-primary inline-flex items-center gap-2">
               <Play className="size-4" />
               {tCourseDetail("continueLesson")}
