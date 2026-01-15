@@ -13,7 +13,10 @@
     "lint:fix": "next lint --fix",
     "preview": "next build && next start",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "content:sync": "node scripts/sync-content.mjs",
+    "content:push": "npx convex run seed:seed",
+    "content:refresh": "npm run content:sync && npm run content:push"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.36.7",
