@@ -149,7 +149,7 @@ export default function PrivacyPage() {
                     className="lg:col-span-4"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="bg-primary/10 flex size-12 flex-shrink-0 items-center justify-center rounded-lg">
+                      <div className="bg-primary/10 flex size-12 shrink-0 items-center justify-center rounded-lg">
                         <Icon className="text-primary size-6" />
                       </div>
                       <span className="label-mono">{section.title}</span>

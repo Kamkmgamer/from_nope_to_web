@@ -270,7 +270,7 @@ export default function AboutPage() {
                 <div className="card-editorial p-8 lg:p-12">
                   <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
                     {/* Avatar placeholder */}
-                    <div className="bg-muted flex size-24 flex-shrink-0 items-center justify-center lg:size-32">
+                    <div className="bg-muted flex size-24 shrink-0 items-center justify-center lg:size-32">
                       <span className="font-display text-primary text-4xl">
                         K
                       </span>

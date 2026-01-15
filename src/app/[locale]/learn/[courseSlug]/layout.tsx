@@ -66,7 +66,7 @@ export default function CourseLayout({
       {/* Main Content Area */}
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar - Desktop */}
-        <aside className="hidden w-80 flex-shrink-0 border-r lg:block">
+        <aside className="hidden w-80 shrink-0 border-r lg:block">
           <CourseSidebar courseSlug={courseSlug} />
         </aside>
 
