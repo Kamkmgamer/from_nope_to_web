@@ -10,26 +10,24 @@ Welcome to the complete curriculum for "From Nope to Web" - a comprehensive lear
 
 ```
 Course Material/
-├── 01-Web-Foundations/          # Start here!
-│   ├── README.md                # Course overview
-│   ├── 01-how-the-web-works.md
-│   ├── 02-html-syntax-and-tags.md
-│   ├── 03-css-selectors.md
-│   ├── 04-the-box-model.md
-│   └── 05-flexbox-layout.md
+├── 00-Setup/                    # FIRST STEP!
+│   └── 01-installation.md       # Installing tools
 │
-├── 02-JavaScript-Mastery/       # Then here
-│   ├── README.md                # Course overview
-│   ├── 01-variables.md
-│   ├── 02-functions.md
-│   ├── 03-control-flow.md
-│   └── 04-objects-and-arrays.md
+├── 01-Web-Foundations/          # HTML & CSS
+│   ├── README.md
+│   ├── ...
 │
-└── 03-React-NextJS/             # Finally here
-    ├── README.md                # Course overview
-    ├── 01-components-and-props.md
-    ├── 02-state-with-usestate.md
-    └── 03-useeffect-hook.md
+├── 02-JavaScript-Mastery/       # Programming Logic
+│   ├── README.md
+│   ├── ...
+│
+├── 03-React-NextJS/             # Modern Frameworks
+│   ├── README.md
+│   ├── ...
+│
+└── 04-T3-Stack (Coming Soon)/   # Professional Development
+    ├── README.md
+    └── ...
 ```
 
 ---
