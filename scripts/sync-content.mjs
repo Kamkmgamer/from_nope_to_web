@@ -52,6 +52,14 @@ const COURSE_CONFIG = {
     descriptionAr: "أتقن التطوير المتكامل الحديث: TypeScript, Tailwind, tRPC, و Next.js",
     image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2070&auto=format&fit=crop",
     order: 4
+  },
+  "05-Hosting-Deployment": {
+    titleEn: "Hosting & Deployment",
+    titleAr: "الاستضافة والنشر",
+    descriptionEn: "Get your website live on the internet. Learn to deploy with GitHub Pages, Vercel, and Netlify.",
+    descriptionAr: "انشر موقعك على الإنترنت. تعلم النشر مع GitHub Pages و Vercel و Netlify.",
+    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop",
+    order: 5
   }
 };
 

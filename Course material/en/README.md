@@ -25,7 +25,11 @@ Course Material/
 │   ├── README.md
 │   ├── ...
 │
-└── 04-T3-Stack (Coming Soon)/   # Professional Development
+├── 04-T3-Stack/                 # Professional Development
+│   ├── README.md
+│   ├── ...
+│
+└── 05-Hosting-Deployment/       # Get Your Website Live!
     ├── README.md
     └── ...
 ```
@@ -76,6 +80,23 @@ _Build modern web applications_
 | 3.3    | useEffect Hook      | 40 min |
 
 **Outcome:** You can build production-ready web applications.
+
+---
+
+### Phase 5: Hosting & Deployment (~2.5 hours)
+
+_Get your website live on the internet!_
+
+| Lesson | Topic                   | Time   |
+| ------ | ----------------------- | ------ |
+| 5.1    | Introduction to Hosting | 20 min |
+| 5.2    | GitHub Pages            | 25 min |
+| 5.3    | Deploying with Vercel   | 25 min |
+| 5.4    | Deploying with Netlify  | 20 min |
+| 5.5    | Custom Domains & DNS    | 30 min |
+| 5.6    | Environment Variables   | 20 min |
+
+**Outcome:** You can deploy any website to the internet with a custom domain.
 
 ---
 
