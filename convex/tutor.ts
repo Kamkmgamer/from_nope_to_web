@@ -7,9 +7,13 @@ export const chat = action({
   args: {
     messages: v.array(
       v.object({
-        role: v.union(v.literal("user"), v.literal("assistant"), v.literal("system")),
+        role: v.union(
+          v.literal("user"),
+          v.literal("assistant"),
+          v.literal("system"),
+        ),
         content: v.string(),
-      })
+      }),
     ),
   },
   handler: async (ctx, args) => {
@@ -34,7 +38,11 @@ export const chat = action({
         max_tokens: 4096,
       });
 
-      return completion.choices[0].message.content ?? "";
+      const choice = completion.choices[0];
+      if (!choice?.message) {
+        return "";
+      }
+      return choice.message.content ?? "";
     } catch (error) {
       console.error("Error calling Cerebras API:", error);
       return "Sorry, I encountered an error communicating with the AI service. Please try again later.";
