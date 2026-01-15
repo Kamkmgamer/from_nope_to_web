@@ -16,6 +16,7 @@ import type * as modules from "../modules.js";
 import type * as progress from "../progress.js";
 import type * as seed from "../seed.js";
 import type * as seedData from "../seedData.js";
+import type * as tutor from "../tutor.js";
 import type * as users from "../users.js";
 
 import type {
@@ -33,6 +34,7 @@ declare const fullApi: ApiFromModules<{
   progress: typeof progress;
   seed: typeof seed;
   seedData: typeof seedData;
+  tutor: typeof tutor;
   users: typeof users;
 }>;
 

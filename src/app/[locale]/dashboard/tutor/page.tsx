@@ -16,6 +16,8 @@ import {
 import { useUser } from "@clerk/nextjs";
 import { useLocale, useTranslations } from "next-intl";
 import { cn } from "~/lib/utils";
+import { useAction } from "convex/react";
+import { api } from "@convex/_generated/api";
 
 // Types for chat messages
 interface Message {
@@ -68,271 +70,17 @@ function formatTime(date: Date): string {
   }).format(date);
 }
 
-// Mock AI response generator (simulates educational AI tutor)
-function generateMockResponse(userMessage: string, locale: string): string {
-  const isRTL = locale === "ar";
-
-  const responses: Record<string, string> = {};
-
-  // Initialize responses based on locale
-  if (isRTL) {
-    responses.greeting = `مرحباً! 👋 أنا المساعد الذكي الخاص بك في رحلة تعلم تطوير الويب.
-
-يسعدني أن أساعدك في فهم المفاهيم البرمجية، حل التحديات، أو شرح أي جزء من الدروس.
-
-كيف يمكنني مساعدتك اليوم؟`;
-
-    responses.help = `بالتأكيد! يمكنني مساعدتك في عدة مجالات:
-
-## 📚 ما يمكنني مساعدتك به:
-
-### 1. **فهم المفاهيم**
-- شرح أساسيات HTML, CSS, JavaScript
-- فهم مفاهيم React و Next.js
-- توضيح الأنماط والممارسات الجيدة
-
-### 2. **حل التحديات**
-- تحليل المشاكل البرمجية
-- تقديم حلول عملية
-- شرح الأخطاء الشائعة
-
-### 3. **مراجعة الكود**
-- تحسين الكود الخاص بك
-- اقتراح تحسينات الأداء
-- تطبيق أفضل الممارسات
-
-### 4. **أسئلة عامة**
-- نصائح حول التعلم
-- موارد إضافية
-- توجيه في مسارك التعليمي
-
-ما الذي تريد استكشافه اليوم؟ 🚀`;
-
-    responses.react = `## 🎯 مقدمة في React
-
-React هي مكتبة JavaScript لبناء واجهات المستخدم. إليك المفاهيم الأساسية:
-
-\`\`\`jsx
-// مكون بسيط في React
-function Welcome({ name }) {
-  return <h1>مرحباً، {name}!</h1>;
-}
-
-// استخدام المكون
-<Welcome name="أحمد" />
-\`\`\`
-
-### المفاهيم الأساسية:
-
-1. **المكونات (Components)** - الوحدات القابلة لإعادة الاستخدام
-2. **الخصائص (Props)** - البيانات الممررة للمكونات
-3. **الحالة (State)** - البيانات المحلية للمكون
-
-### لماذا React؟
-- ✅ إعادة استخدام المكونات
-- ✅ تدفق بيانات أحادي الاتجاه
-- ✅ نظام إيكولوجي غني
-- ✅ دعم قوي من المجتمع
-
-هل تريد شرح أعمق لأي مفهوم؟ 😊`;
-
-    responses.javascript = `## 📜 أساسيات JavaScript
-
-JavaScript هي لغة البرمجة للويب. دعني أشرح لك المفاهيم الأساسية:
-
-\`\`\`javascript
-// المتغيرات
-let name = "أحمد";
-const age = 25;
-
-// الدوال
-function greet(message) {
-  return \`مرحباً، \${message}\`;
-}
-
-// المصفوفات
-const skills = ["HTML", "CSS", "JavaScript"];
-
-// الكائنات
-const developer = {
-  name: name,
-  skills: skills,
-  code: () => console.log("كتابة كود جميل! 🚀")
-};
-\`\`\`
-
-### المفاهيم المهمة:
-
-1. **let vs const** - المتغيرات الثابتة والمتغيرة
-2. **الدوال** - إعادة استخدام الكود
-3. **المصفوفات** - تخزين مجموعات البيانات
-4. **الكائنات** - تنظيم البيانات بشكل منطقي
-
-هل تريد أمثلة أكثر تعمقاً؟ 🤔`;
-
-    responses.default = `## 💡 سؤال رائع!
-
-شكراً على سؤالك! دعني أساعدك في فهم هذا المفهوم بشكل أفضل.
-
-### ما يمكنك فعله الآن:
-
-1. **اطرح سؤالاً محدداً** - كلما كان سؤالك أكثر تحديداً، كان الجواب أفضل
-2. **شارك كودك** - يمكنني مراجعته وتقديم اقتراحات للتحسين
-3. **اطلب شرحاً أعمق** - إذا كان الشرح الأول غير كافٍ
-
-### أمثلة على أسئلة جيدة:
-
-- "كيف أستخدم useState في React؟"
-- "ما الفرق بين let و const؟"
-- "كيف أجعل هذا الكود أكثر كفاءة؟"
-- "اشرح لي مفهوم الـ Closures"
-
-كيف يمكنني مساعدتك بشكل أفضل؟ 😊`;
-  } else {
-    responses.greeting = `Hello! 👋 I'm your AI tutor assistant here to help you on your web development learning journey.
-
-I'm happy to help you understand programming concepts, solve challenges, or explain any part of your lessons.
-
-How can I help you today?`;
-
-    responses.help = `Of course! I can help you in several areas:
-
-## 📚 What I can help you with:
-
-### 1. **Understanding Concepts**
-- Explaining HTML, CSS, JavaScript basics
-- Understanding React and Next.js concepts
-- Clarifying best practices and patterns
-
-### 2. **Solving Challenges**
-- Analyzing programming problems
-- Providing practical solutions
-- Explaining common errors
-
-### 3. **Code Review**
-- Improving your code
-- Suggesting performance optimizations
-- Applying best practices
-
-### 4. **General Questions**
-- Learning tips
-- Additional resources
-- Guidance on your learning path
-
-What would you like to explore today? 🚀`;
-
-    responses.react = `## 🎯 Introduction to React
-
-React is a JavaScript library for building user interfaces. Here are the core concepts:
-
-\`\`\`jsx
-// Simple component in React
-function Welcome({ name }) {
-  return <h1>Hello, {name}!</h1>;
-}
-
-// Using the component
-<Welcome name="Ahmed" />
-\`\`\`
-
-### Core Concepts:
-
-1. **Components** - Reusable building blocks
-2. **Props** - Data passed to components
-3. **State** - Local data within components
-
-### Why React?
-- ✅ Component reusability
-- ✅ Unidirectional data flow
-- ✅ Rich ecosystem
-- ✅ Strong community support
-
-Would you like a deeper explanation of any concept? 😊`;
-
-    responses.javascript = `## 📜 JavaScript Basics
-
-JavaScript is the programming language of the web. Let me explain the core concepts:
-
-\`\`\`javascript
-// Variables
-let name = "Ahmed";
-const age = 25;
-
-// Functions
-function greet(message) {
-  return \`Hello, \${message}\`;
-}
-
-// Arrays
-const skills = ["HTML", "CSS", "JavaScript"];
-
-// Objects
-const developer = {
-  name: name,
-  skills: skills,
-  code: () => console.log("Writing beautiful code! 🚀")
-};
-\`\`\`
-
-### Important Concepts:
-
-1. **let vs const** - Mutable and immutable variables
-2. **Functions** - Reusable code blocks
-3. **Arrays** - Storing data collections
-4. **Objects** - Organizing data logically
-
-Would you like more in-depth examples? 🤔`;
-
-    responses.default = `## 💡 Great question!
-
-Thanks for asking! Let me help you understand this concept better.
-
-### What you can do now:
-
-1. **Ask a specific question** - The more specific, the better the answer
-2. **Share your code** - I can review it and suggest improvements
-3. **Request deeper explanation** - If the first explanation isn't enough
-
-### Examples of good questions:
-
-- "How do I use useState in React?"
-- "What's the difference between let and const?"
-- "How can I make this code more efficient?"
-- "Explain the concept of Closures to me"
-
-How can I help you better? 😊`;
-  }
-
-  // Simple keyword matching for mock responses
-  const lowerMessage = userMessage.toLowerCase();
-
-  if (
-    lowerMessage.includes("مرحبا") ||
-    lowerMessage.includes("hello") ||
-    lowerMessage.includes("hi")
-  ) {
-    return responses.greeting;
-  }
-  if (
-    lowerMessage.includes("مساعد") ||
-    lowerMessage.includes("help") ||
-    lowerMessage.includes("what can")
-  ) {
-    return responses.help;
-  }
-  if (lowerMessage.includes("react") || lowerMessage.includes("رياكت")) {
-    return responses.react;
-  }
-  if (
-    lowerMessage.includes("javascript") ||
-    lowerMessage.includes("جافا") ||
-    lowerMessage.includes("js")
-  ) {
-    return responses.javascript;
-  }
-
-  return responses.default;
-}
+// System prompts
+const SYSTEM_PROMPT_AR = `أنت مساعد تعليمي ذكي ومتخصص في تعليم برمجة الويب (Web Development).
+دورك هو مساعدة الطالب في رحلة تعلمه، شرح المفاهيم بوضوح، حل المشكلات البرمجية، وتوفير أمثلة عملية.
+يجب أن تكون إجاباتك مشجعة، دقيقة، ومناسبة للمبتدئين والمستوى المتوسط.
+استخدم اللغة العربية في الشرح، ويمكنك استخدام المصطلحات الإنجليزية عند الضرورة مع توضيحها.
+أنت خبير في: HTML, CSS, JavaScript, React, Next.js, TypeScript, Tailwind CSS.`;
+
+const SYSTEM_PROMPT_EN = `You are an intelligent educational assistant specialized in teaching Web Development.
+Your role is to help the student in their learning journey, explain concepts clearly, solve programming problems, and provide practical examples.
+Your answers should be encouraging, accurate, and suitable for beginner to intermediate levels.
+You are an expert in: HTML, CSS, JavaScript, React, Next.js, TypeScript, Tailwind CSS.`;
 
 // Simple markdown parser for code blocks (simplified version for demo)
 function MarkdownRenderer({ content }: { content: string }) {
@@ -610,6 +358,7 @@ export default function TutorPage() {
   const isRTL = locale === "ar";
   const t = useTranslations("dashboard.tutor") || ((key: string) => key);
   const tCommon = useTranslations("dashboard.common") || ((key: string) => key);
+  const chat = useAction(api.tutor.chat);
 
   // State management
   const [messages, setMessages] = useState<Message[]>([]);
@@ -634,10 +383,11 @@ export default function TutorPage() {
   const handleSendMessage = useCallback(async () => {
     if (!inputValue.trim() || isLoading) return;
 
+    const content = inputValue.trim();
     const userMessage: Message = {
       id: generateId(),
       role: "user",
-      content: inputValue.trim(),
+      content,
       timestamp: new Date(),
     };
 
@@ -647,23 +397,49 @@ export default function TutorPage() {
     setIsWelcomeVisible(false);
     setIsLoading(true);
 
-    // Simulate AI thinking delay
-    const thinkingDelay = 1500 + Math.random() * 1000;
+    try {
+      // Prepare conversation history for the API
+      const history = messages.map((m) => ({
+        role: m.role,
+        content: m.content,
+      }));
 
-    setTimeout(() => {
-      const aiResponse = generateMockResponse(userMessage.content, locale);
+      // Add current message
+      history.push({ role: "user", content });
+
+      // Add system prompt
+      const systemMessage = {
+        role: "system" as const,
+        content: isRTL ? SYSTEM_PROMPT_AR : SYSTEM_PROMPT_EN,
+      };
+
+      const responseContent = await chat({
+        messages: [systemMessage, ...history],
+      });
 
       const aiMessage: Message = {
         id: generateId(),
         role: "assistant",
-        content: aiResponse,
+        content: responseContent,
         timestamp: new Date(),
       };
 
       setMessages((prev) => [...prev, aiMessage]);
+    } catch (error) {
+      console.error("Failed to get AI response:", error);
+      const errorMessage: Message = {
+        id: generateId(),
+        role: "assistant",
+        content: isRTL
+          ? "عذراً، حدث خطأ أثناء الاتصال بالمساعد الذكي. يرجى المحاولة مرة أخرى لاحقاً."
+          : "Sorry, an error occurred while connecting to the AI assistant. Please try again later.",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
       setIsLoading(false);
-    }, thinkingDelay);
-  }, [inputValue, isLoading, locale]);
+    }
+  }, [inputValue, isLoading, messages, chat, isRTL]);
 
   // Handle new chat
   const handleNewChat = useCallback(() => {
