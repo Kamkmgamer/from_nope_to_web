@@ -29,7 +29,7 @@ export function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="#features"
+                  href="/features"
                   className="text-muted-foreground hover:text-foreground text-sm transition-colors"
                 >
                   {tNav("features")}
@@ -37,7 +37,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="#roadmap"
+                  href="/roadmap"
                   className="text-muted-foreground hover:text-foreground text-sm transition-colors"
                 >
                   {tNav("roadmap")}

@@ -13,8 +13,8 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { href: "/#features", label: t("features") },
-    { href: "/#roadmap", label: t("roadmap") },
+    { href: "/features", label: t("features") },
+    { href: "/roadmap", label: t("roadmap") },
     { href: "/about", label: t("about") },
   ];
 

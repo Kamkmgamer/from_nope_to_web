@@ -23,24 +23,38 @@
     }
   },
   "features": {
+    "backToHome": "Back to Home",
     "label": "What you get",
     "title": "Tools for <highlight>serious</highlight> learning",
+    "subtitle": "Everything you need to go from complete beginner to confident full-stack developer.",
     "items": {
       "interactive": {
+        "label": "01",
         "title": "Interactive Coding",
-        "description": "Write and execute code directly in your browser. Real-time feedback as you learn."
+        "description": "Write and execute code directly in your browser. Real-time feedback as you learn.",
+        "detail1": "Our built-in code editor lets you write React, TypeScript, and more without leaving the browser. No complex setup, no environment configuration, just pure learning.",
+        "detail2": "Get instant feedback on your code with our intelligent checker. See errors highlighted in real-time and learn from your mistakes as you make them."
       },
       "ai": {
+        "label": "02",
         "title": "AI Tutor",
-        "description": "Context-aware assistance that understands your current lesson and code."
+        "description": "Context-aware assistance that understands your current lesson and code.",
+        "detail1": "Struggling with a concept? Your AI tutor knows exactly where you are in the curriculum and can provide hints, explanations, and guidance tailored to your current lesson.",
+        "detail2": "Ask follow-up questions, request alternative explanations, or get step-by-step help. The tutor remembers your conversation and learning progress."
       },
       "bilingual": {
+        "label": "03",
         "title": "Bilingual",
-        "description": "Full Arabic and English support. RTL layouts, localized content."
+        "description": "Full Arabic and English support. RTL layouts, localized content.",
+        "detail1": "Learn in the language you think in. Every lesson, tutorial, and explanation is available in both Arabic and English, with full RTL support for Arabic speakers.",
+        "detail2": "Switch between languages instantly. Compare explanations side by side. Build technical vocabulary in both languages from day one."
       },
       "structured": {
+        "label": "04",
         "title": "Structured Path",
-        "description": "From HTML basics to advanced T3 stack. Clear progression, no guesswork."
+        "description": "From HTML basics to advanced T3 stack. Clear progression, no guesswork.",
+        "detail1": "No more tutorial hell. Our carefully crafted curriculum takes you from absolute beginner to job-ready developer in four progressive modules.",
+        "detail2": "Each lesson builds on the previous one. Track your progress, unlock new content as you master fundamentals, and graduate to more advanced topics."
       }
     }
   },
@@ -48,7 +62,10 @@
     "label": "Roadmap",
     "title": "Four modules from <zero>zero</zero> to <production>production</production>",
     "subtitle": "A structured curriculum designed to take you from complete beginner to confident full-stack developer.",
+    "backToHome": "Back to Home",
     "launchingSoon": "Courses launching soon",
+    "extendedDescription": "This comprehensive curriculum is designed to take you from complete beginner to confident full-stack developer. Each module builds upon the previous one, ensuring you have a solid foundation before moving to more advanced topics.",
+    "extendedSubtitle": "You'll learn by building real projects, not just watching videos. Every module includes hands-on exercises, coding challenges, and a final project to showcase your skills.",
     "levels": {
       "beginner": "Beginner",
       "intermediate": "Intermediate",
