@@ -126,7 +126,7 @@ function MarkdownRenderer({ content }: { content: string }) {
         return (
           <div
             key={index}
-            className="prose prose-invert max-w-none"
+            className="prose dark:prose-invert text-foreground max-w-none"
             dangerouslySetInnerHTML={{
               __html: part
                 .replace(
