@@ -82,76 +82,107 @@ Your role is to help the student in their learning journey, explain concepts cle
 Your answers should be encouraging, accurate, and suitable for beginner to intermediate levels.
 You are an expert in: HTML, CSS, JavaScript, React, Next.js, TypeScript, Tailwind CSS.`;
 
-// Simple markdown parser for code blocks (simplified version for demo)
+import ReactMarkdown from "react-markdown";
+
+// Markdown renderer component using react-markdown
 function MarkdownRenderer({ content }: { content: string }) {
-  // Split content by code blocks
-  const parts = content.split(/(\`\`\`[\s\S]*?\`\`\`)/g);
-
   return (
-    <div className="space-y-3">
-      {parts.map((part, index) => {
-        // Check if this is a code block
-        if (part.startsWith("```") && part.endsWith("```")) {
-          const codeContent = part.slice(3, -3);
-          const lines = codeContent.split("\n");
-          const language = lines[0]?.trim() ?? "";
-          const code = lines.slice(1).join("\n");
+    <div className="prose dark:prose-invert text-foreground prose-p:leading-relaxed prose-pre:p-0 prose-pre:bg-transparent max-w-none">
+      <ReactMarkdown
+        components={{
+          code({ className, children, ...props }) {
+            const match = /language-(\w+)/.exec(className ?? "");
+            const isInline =
+              !match && !String(children as string).includes("\n");
+            const language = match ? match[1] : "";
+            const codeText = String(children as string).replace(/\n$/, "");
 
-          return (
-            <div key={index} className="group relative">
-              <div className="bg-secondary/80 border-foreground/10 overflow-hidden rounded-lg border backdrop-blur">
+            if (isInline) {
+              return (
+                <code
+                  className="bg-secondary/50 text-primary rounded px-1.5 py-0.5 font-mono text-sm"
+                  {...props}
+                >
+                  {children}
+                </code>
+              );
+            }
+
+            return (
+              <div className="group border-foreground/10 bg-secondary/80 relative my-4 overflow-hidden rounded-lg border backdrop-blur">
                 {language && (
-                  <div className="bg-secondary/50 text-muted-foreground border-foreground/10 border-b px-4 py-2 font-mono text-xs">
-                    {language}
+                  <div className="bg-secondary/50 text-muted-foreground border-foreground/10 flex items-center justify-between border-b px-4 py-2 font-mono text-xs">
+                    <span>{language}</span>
                   </div>
                 )}
-                <pre className="overflow-x-auto p-4">
-                  <code className="text-foreground font-mono text-sm">
-                    {code}
-                  </code>
-                </pre>
+                <div className="relative">
+                  <pre className="scrollbar-thin scrollbar-thumb-foreground/10 scrollbar-track-transparent overflow-x-auto p-4 text-sm">
+                    <code
+                      className={cn("text-foreground font-mono", className)}
+                      {...props}
+                    >
+                      {children}
+                    </code>
+                  </pre>
+                  <button
+                    className="bg-secondary/80 text-muted-foreground hover:text-foreground hover:bg-secondary absolute top-2 right-2 rounded-md p-2 opacity-0 transition-all duration-200 group-hover:opacity-100 rtl:right-auto rtl:left-2"
+                    onClick={() => navigator.clipboard.writeText(codeText)}
+                    title="Copy code"
+                  >
+                    <Copy className="size-4" />
+                  </button>
+                </div>
               </div>
-              <button
-                className="bg-secondary/80 hover:bg-secondary text-muted-foreground hover:text-foreground absolute top-2 right-2 rounded-md p-2 opacity-0 transition-opacity group-hover:opacity-100 rtl:left-2"
-                onClick={() => navigator.clipboard.writeText(code)}
-                title="Copy code"
-              >
-                <Copy className="size-4" />
-              </button>
-            </div>
-          );
-        }
-
-        // Regular text with simple formatting
-        return (
-          <div
-            key={index}
-            className="prose dark:prose-invert text-foreground max-w-none"
-            dangerouslySetInnerHTML={{
-              __html: part
-                .replace(
-                  /## (.*)/g,
-                  '<h2 class="text-lg font-display font-semibold mt-4 mb-2">$1</h2>',
-                )
-                .replace(
-                  /### (.*)/g,
-                  '<h3 class="text-base font-medium mt-3 mb-1">$1</h3>',
-                )
-                .replace(
-                  /\*\*(.*?)\*\*/g,
-                  '<strong class="font-semibold">$1</strong>',
-                )
-                .replace(
-                  /`([^`]+)`/g,
-                  '<code class="bg-secondary/50 px-1.5 py-0.5 rounded text-sm font-mono">$1</code>',
-                )
-                .replace(/(\d+\. )/g, '<span class="font-medium">$1</span>')
-                .replace(/- (.*)/g, "• $1")
-                .replace(/\n/g, "<br/>"),
-            }}
-          />
-        );
-      })}
+            );
+          },
+          // Custom styling for other elements
+          ul: ({ children }) => (
+            <ul className="my-2 list-disc space-y-1 pl-4">{children}</ul>
+          ),
+          ol: ({ children }) => (
+            <ol className="my-2 list-decimal space-y-1 pl-4">{children}</ol>
+          ),
+          li: ({ children }) => <li className="pl-1">{children}</li>,
+          h1: ({ children }) => (
+            <h1 className="font-display mt-6 mb-3 text-2xl font-bold">
+              {children}
+            </h1>
+          ),
+          h2: ({ children }) => (
+            <h2 className="font-display mt-5 mb-2 text-xl font-semibold">
+              {children}
+            </h2>
+          ),
+          h3: ({ children }) => (
+            <h3 className="font-display mt-4 mb-2 text-lg font-medium">
+              {children}
+            </h3>
+          ),
+          p: ({ children }) => (
+            <p className="mb-3 leading-relaxed last:mb-0">{children}</p>
+          ),
+          strong: ({ children }) => (
+            <strong className="text-primary font-semibold">{children}</strong>
+          ),
+          a: ({ href, children }) => (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary font-medium hover:underline"
+            >
+              {children}
+            </a>
+          ),
+          blockquote: ({ children }) => (
+            <blockquote className="border-primary/30 bg-secondary/30 my-4 rounded-r-lg border-l-4 py-1 pl-4 italic">
+              {children}
+            </blockquote>
+          ),
+        }}
+      >
+        {content}
+      </ReactMarkdown>
     </div>
   );
 }
