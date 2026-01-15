@@ -305,7 +305,13 @@ function LoadingIndicator({ isRTL }: { isRTL: boolean }) {
 }
 
 // Empty state component
-function EmptyState({ locale }: { locale: string }) {
+function EmptyState({
+  locale,
+  onSelectQuestion,
+}: {
+  locale: string;
+  onSelectQuestion: (question: string) => void;
+}) {
   const t = useTranslations("dashboard.tutor");
   const isRTL = locale === "ar";
 
@@ -332,9 +338,10 @@ function EmptyState({ locale }: { locale: string }) {
             ? "كيف أحسّن أداء الكود؟"
             : "How can I improve code performance?",
           isRTL ? "اشرح لي مفهوم المكونات" : "Explain components to me",
-        ].map((question, index) => (
+        ].map((question) => (
           <button
-            key={index}
+            key={question}
+            onClick={() => onSelectQuestion(question)}
             className="card-editorial hover:border-foreground/50 group p-4 text-left transition-all duration-300"
           >
             <div className="flex items-center gap-3">
@@ -380,66 +387,72 @@ export default function TutorPage() {
   }, [messages, isLoading, scrollToBottom]);
 
   // Handle sending a message
-  const handleSendMessage = useCallback(async () => {
-    if (!inputValue.trim() || isLoading) return;
+  const sendMessage = useCallback(
+    async (content: string) => {
+      if (!content.trim() || isLoading) return;
 
-    const content = inputValue.trim();
-    const userMessage: Message = {
-      id: generateId(),
-      role: "user",
-      content,
-      timestamp: new Date(),
-    };
-
-    // Add user message
-    setMessages((prev) => [...prev, userMessage]);
-    setInputValue("");
-    setIsWelcomeVisible(false);
-    setIsLoading(true);
-
-    try {
-      // Prepare conversation history for the API
-      const history = messages.map((m) => ({
-        role: m.role,
-        content: m.content,
-      }));
-
-      // Add current message
-      history.push({ role: "user", content });
-
-      // Add system prompt
-      const systemMessage = {
-        role: "system" as const,
-        content: isRTL ? SYSTEM_PROMPT_AR : SYSTEM_PROMPT_EN,
-      };
-
-      const responseContent = await chat({
-        messages: [systemMessage, ...history],
-      });
-
-      const aiMessage: Message = {
+      const userMessage: Message = {
         id: generateId(),
-        role: "assistant",
-        content: responseContent,
+        role: "user",
+        content,
         timestamp: new Date(),
       };
 
-      setMessages((prev) => [...prev, aiMessage]);
-    } catch (error) {
-      console.error("Failed to get AI response:", error);
-      const errorMessage: Message = {
-        id: generateId(),
-        role: "assistant",
-        content: isRTL
-          ? "عذراً، حدث خطأ أثناء الاتصال بالمساعد الذكي. يرجى المحاولة مرة أخرى لاحقاً."
-          : "Sorry, an error occurred while connecting to the AI assistant. Please try again later.",
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [inputValue, isLoading, messages, chat, isRTL]);
+      // Add user message
+      setMessages((prev) => [...prev, userMessage]);
+      setInputValue("");
+      setIsWelcomeVisible(false);
+      setIsLoading(true);
+
+      try {
+        // Prepare conversation history for the API
+        const history = messages.map((m) => ({
+          role: m.role,
+          content: m.content,
+        }));
+
+        // Add current message
+        history.push({ role: "user", content });
+
+        // Add system prompt
+        const systemMessage = {
+          role: "system" as const,
+          content: isRTL ? SYSTEM_PROMPT_AR : SYSTEM_PROMPT_EN,
+        };
+
+        const responseContent = await chat({
+          messages: [systemMessage, ...history],
+        });
+
+        const aiMessage: Message = {
+          id: generateId(),
+          role: "assistant",
+          content: responseContent,
+          timestamp: new Date(),
+        };
+
+        setMessages((prev) => [...prev, aiMessage]);
+      } catch (error) {
+        console.error("Failed to get AI response:", error);
+        const errorMessage: Message = {
+          id: generateId(),
+          role: "assistant",
+          content: isRTL
+            ? "عذراً، حدث خطأ أثناء الاتصال بالمساعد الذكي. يرجى المحاولة مرة أخرى لاحقاً."
+            : "Sorry, an error occurred while connecting to the AI assistant. Please try again later.",
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, errorMessage]);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [isLoading, messages, chat, isRTL],
+  );
+
+  const handleSendMessage = useCallback(() => {
+    void sendMessage(inputValue.trim());
+  }, [sendMessage, inputValue]);
 
   // Handle new chat
   const handleNewChat = useCallback(() => {
@@ -518,7 +531,10 @@ export default function TutorPage() {
         {/* Messages */}
         <AnimatePresence mode="popLayout">
           {isWelcomeVisible ? (
-            <EmptyState locale={locale} />
+            <EmptyState
+              locale={locale}
+              onSelectQuestion={(q) => void sendMessage(q)}
+            />
           ) : (
             <motion.div
               variants={containerVariants}
