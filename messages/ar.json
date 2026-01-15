@@ -57,19 +57,19 @@
     "items": {
       "foundations": {
         "title": "أساسيات الويب",
-        "description": "HTML و CSS و JavaScript من الصفر."
+        "description": "HTML و CSS. هيكلة وتنسيق الإنترنت."
+      },
+      "js": {
+        "title": "إتقان JavaScript",
+        "description": "المنطق، الحلقات، والتفاعلية. لغة الويب."
       },
       "react": {
-        "title": "إتقان React",
-        "description": "تطوير واجهات حديثة مع React 19."
-      },
-      "nextjs": {
-        "title": "Next.js والتطوير الكامل",
-        "description": "تطبيقات إنتاجية مع Next.js 15."
+        "title": "React و Next.js الحديثة",
+        "description": "المكونات، Hooks، والرسم على الخادم."
       },
       "t3": {
-        "title": "T3 Stack",
-        "description": "تطوير متكامل آمن النوع."
+        "title": "مسار T3 Stack الاحترافي",
+        "description": "TypeScript, Tailwind, tRPC, وهندسة قواعد البيانات."
       }
     }
   },

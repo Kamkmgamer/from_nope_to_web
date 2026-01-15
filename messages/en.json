@@ -57,19 +57,19 @@
     "items": {
       "foundations": {
         "title": "Web Foundations",
-        "description": "HTML, CSS, and JavaScript from scratch."
+        "description": "HTML & CSS. Structure and style the internet."
+      },
+      "js": {
+        "title": "JavaScript Mastery",
+        "description": "Logic, loops, and interactivity. The language of the web."
       },
       "react": {
-        "title": "React Mastery",
-        "description": "Modern UI development with React 19."
-      },
-      "nextjs": {
-        "title": "Next.js & Full-Stack",
-        "description": "Production apps with Next.js 15."
+        "title": "Modern React & Next.js",
+        "description": "Components, Hooks, and Server Side Rendering."
       },
       "t3": {
-        "title": "T3 Stack",
-        "description": "Type-safe full-stack development."
+        "title": "Professional T3 Stack",
+        "description": "TypeScript, Tailwind, tRPC, and Database architecture."
       }
     }
   },
