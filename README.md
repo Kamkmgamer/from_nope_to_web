@@ -1,29 +1,119 @@
-# Create T3 App
+# From Nope to Web
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+![Editorial Codex](https://img.shields.io/badge/Aesthetic-Editorial_Codex-b91c1c?style=flat-square)
+![Next.js 15](https://img.shields.io/badge/Next.js-15-000000?style=flat-square)
+![Convex](https://img.shields.io/badge/Convex-Backend-ed7c30?style=flat-square)
+![Clerk](https://img.shields.io/badge/Clerk-Auth-6c47ff?style=flat-square)
+![Tailwind 4](https://img.shields.io/badge/Tailwind-v4-38bdf8?style=flat-square)
 
-## What's next? How do I make an app with this?
+A sophisticated, bilingual educational platform designed to take students from zero knowledge ("Nope") to full-stack web developers ("Web"). Built with a focus on premium aesthetics ("Editorial Codex"), high performance, and deep interactivity.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## 📖 Philosophy & Design
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+**From Nope to Web** isn't just a course; it's an experience. We reject the "generic SaaS" look in favor of a **Editorial Codex** aesthetic—combining the readability of a high-end magazine with the utility of technical documentation.
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+- **Typography**: _Instrument Serif_ for headlines, _Space Mono_ for code and data.
+- **Palette**: Warm cream (`#FAF8F5`) and rich charcoal (`#1C1917`) with Vermillion accents.
+- **Interaction**: Fluid animations powered by Framer Motion.
 
-## Learn More
+## 🛠️ Tech Stack
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+This project is built on the [T3 Stack](https://create.t3.gg/) principles but evolved for 2026 standards:
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router, Server Components)
+- **Backend & Database**: [Convex](https://convex.dev/) (Real-time, TypeScript-first)
+- **Authentication**: [Clerk](https://clerk.com/)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **Internationalization**: [next-intl](https://next-intl-docs.vercel.app/) (Full RTL/LTR support for Arabic & English)
+- **Content**: MDX/Markdown with GFM (GitHub Flavored Markdown) support via `react-markdown` & `remark-gfm`.
+- **AI**: Integrated AI Tutor powered by Cerebras GLM-4.7.
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## ✨ Key Features
 
-## How do I deploy this?
+- **Bilingual Experience**: Seamless switching between English (LTR) and Arabic (RTL) with localized UI and content.
+- **Rich Content Rendering**: Custom Markdown renderer supporting tables, task lists, and syntax highlighting.
+- **Real-time Dashboard**: Track progress, viewed lessons, and upcoming modules.
+- **Content Syncing**: Automated scripts to sync local Markdown files (`Course material/`) with the Convex database.
+- **Interactive Tutor**: AI-powered assistant context-aware of the current lesson.
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 20+
+- pnpm (recommended)
+
+### Installation
+
+1.  **Clone the repository**
+
+    ```bash
+    git clone https://github.com/kamkmgamer/from-nope-to-web.git
+    cd from-nope-to-web
+    ```
+
+2.  **Install dependencies**
+
+    ```bash
+    pnpm install
+    ```
+
+3.  **Environment Setup**
+    Create a `.env.local` file based on `.env.example`:
+
+    ```bash
+    cp .env.example .env.local
+    ```
+
+    Populate it with your keys:
+    - `CONVEX_DEPLOYMENT`: Your Convex project URL
+    - `NEXT_PUBLIC_CONVEX_URL`: Your public Convex URL
+    - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`: Clerk key
+    - `CLERK_SECRET_KEY`: Clerk secret
+
+4.  **Start Development Server**
+    ```bash
+    pnpm dev
+    ```
+    This command runs both the Next.js app (on port 3000) and the Convex dev backend.
+
+### Content Management
+
+Course content lives in the `Course material/` directory. To sync changes to the database:
+
+```bash
+# Sync files to seedData.ts and push to Convex
+pnpm content:refresh
+```
+
+## 📂 Project Structure
+
+```
+├── .clerk/             # Clerk auth config
+├── convex/             # Backend functions & schema
+│   ├── auth.config.ts  # Auth setup
+│   ├── courses.ts      # API endpoints
+│   ├── schema.ts       # Database schema
+│   └── seedData.ts     # Generated content seed
+├── Course material/    # Source of truth for lessons (Markdown)
+├── messages/           # i18n JSON strings (en.json, ar.json)
+├── scripts/            # content-sync utilities
+├── src/
+│   ├── app/            # Next.js App Router pages
+│   ├── components/     # UI components (Atomic design)
+│   ├── lib/            # Utilities
+│   └── styles/         # Global styles & Tailwind
+└── public/             # Static assets
+```
+
+## 🤝 Contributing
+
+1.  Fork the project
+2.  Create your feature branch (`git checkout -b feat/amazing-feature`)
+3.  Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4.  Push to the branch (`git push origin feat/amazing-feature`)
+5.  Open a Pull Request
+
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
