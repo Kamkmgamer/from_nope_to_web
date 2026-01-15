@@ -13,8 +13,8 @@ export default function SignUpPage() {
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 -z-10">
-        <div className="from-accent/20 absolute end-1/4 top-1/4 h-[400px] w-[400px] rounded-full bg-gradient-to-br to-transparent blur-[100px]" />
-        <div className="from-primary/15 absolute start-1/4 bottom-1/4 h-[300px] w-[300px] rounded-full bg-gradient-to-br to-transparent blur-[80px]" />
+        <div className="from-accent/20 absolute end-1/4 top-1/4 h-[400px] w-[400px] rounded-full bg-linear-to-br to-transparent blur-[100px]" />
+        <div className="from-primary/15 absolute start-1/4 bottom-1/4 h-[300px] w-[300px] rounded-full bg-linear-to-br to-transparent blur-[80px]" />
       </div>
 
       <motion.div
