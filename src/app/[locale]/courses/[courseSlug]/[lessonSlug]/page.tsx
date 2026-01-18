@@ -1,26 +1,101 @@
 "use client";
 
-import { useQuery } from "convex/react";
+import { useState } from "react";
+import { useQuery, useMutation } from "convex/react";
 import { api } from "@convex/_generated/api";
 import { Navbar, Footer } from "~/components/layout";
 import { useLocale } from "next-intl";
-import { notFound, useParams } from "next/navigation";
+import { notFound, useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { MarkdownRenderer } from "~/components/shared/MarkdownRenderer";
 import { Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { useUser } from "@clerk/nextjs";
+import type { Id } from "@convex/_generated/dataModel";
 
 export default function LessonPage() {
   const params = useParams();
+  const router = useRouter();
   const courseSlug = params.courseSlug as string;
   const lessonSlug = params.lessonSlug as string;
+  const { user: clerkUser } = useUser();
+
+  const [isNavigating, setIsNavigating] = useState(false);
 
   const data = useQuery(api.lessons.getWithNavigation, {
     slug: lessonSlug,
   });
 
+  const convexUser = useQuery(
+    api.users.getByClerkId,
+    clerkUser?.id ? { clerkId: clerkUser.id } : "skip",
+  );
+
+  const lessonId = data?.lesson?._id as Id<"lessons"> | undefined;
+
+  const lessonProgress = useQuery(
+    api.progress.getForLesson,
+    convexUser?._id && lessonId
+      ? {
+          userId: convexUser._id,
+          lessonId: lessonId,
+        }
+      : "skip",
+  );
+
+  const completeLesson = useMutation(api.progress.completeLesson);
+  const startLesson = useMutation(api.progress.startLesson);
+
+  const shouldStartLesson =
+    convexUser?._id && lessonId && lessonProgress === null;
+
+  if (shouldStartLesson) {
+    void startLesson({
+      userId: convexUser._id,
+      lessonId: lessonId,
+    });
+  }
+
   const locale = useLocale();
   const isRTL = locale === "ar";
+
+  const handleNextLesson = async (nextSlug: string) => {
+    if (!convexUser?._id || !lessonId) {
+      router.push(`/${locale}/courses/${courseSlug}/${nextSlug}`);
+      return;
+    }
+
+    setIsNavigating(true);
+    try {
+      await completeLesson({
+        userId: convexUser._id,
+        lessonId: lessonId,
+      });
+      router.push(`/${locale}/courses/${courseSlug}/${nextSlug}`);
+    } catch (error) {
+      console.error("Failed to complete lesson:", error);
+      setIsNavigating(false);
+    }
+  };
+
+  const handleCompleteCourse = async () => {
+    if (!convexUser?._id || !lessonId) {
+      router.push(`/${locale}/dashboard/courses`);
+      return;
+    }
+
+    setIsNavigating(true);
+    try {
+      await completeLesson({
+        userId: convexUser._id,
+        lessonId: lessonId,
+      });
+      router.push(`/${locale}/dashboard/courses`);
+    } catch (error) {
+      console.error("Failed to complete lesson:", error);
+      setIsNavigating(false);
+    }
+  };
 
   if (data === undefined) {
     return (
@@ -93,30 +168,39 @@ export default function LessonPage() {
             )}
 
             {nextLesson ? (
-              <Link
-                href={`/${locale}/courses/${courseSlug}/${nextLesson.slug}`}
-                className="group border-border hover:border-primary/50 hover:bg-muted/5 flex flex-col items-end gap-4 rounded-lg border p-6 text-right transition-all"
+              <button
+                onClick={() => handleNextLesson(nextLesson.slug)}
+                disabled={isNavigating}
+                className="group border-border hover:border-primary/50 hover:bg-muted/5 flex flex-col items-end gap-4 rounded-lg border p-6 text-right transition-all disabled:opacity-50"
               >
                 <span className="label-mono text-muted-foreground group-hover:text-primary flex items-center gap-2 transition-colors">
-                  {isRTL ? "التالي" : "Next"}{" "}
-                  <span className={isRTL ? "rotate-180" : ""}>&rarr;</span>
+                  {isNavigating ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <>
+                      {isRTL ? "التالي" : "Next"}{" "}
+                      <span className={isRTL ? "rotate-180" : ""}>&rarr;</span>
+                    </>
+                  )}
                 </span>
                 <span className="font-display group-hover:text-primary text-xl transition-colors">
                   {isRTL ? nextLesson.titleAr : nextLesson.titleEn}
                 </span>
-              </Link>
+              </button>
             ) : (
-              <Link
-                href={`/${locale}/courses/${courseSlug}`}
-                className="group border-border flex flex-col items-end gap-4 rounded-lg border p-6 text-right transition-all hover:border-green-500/50 hover:bg-green-500/5"
+              <button
+                onClick={handleCompleteCourse}
+                disabled={isNavigating}
+                className="group border-border flex flex-col items-end gap-4 rounded-lg border p-6 text-right transition-all hover:border-green-500/50 hover:bg-green-500/5 disabled:opacity-50"
               >
-                <span className="label-mono text-muted-foreground transition-colors group-hover:text-green-500">
+                <span className="label-mono text-muted-foreground flex items-center gap-2 transition-colors group-hover:text-green-500">
+                  {isNavigating && <Loader2 className="h-4 w-4 animate-spin" />}
                   {isRTL ? "إكمال" : "Complete"}
                 </span>
                 <span className="font-display text-xl transition-colors group-hover:text-green-500">
                   {isRTL ? "العودة للدورة" : "Back to Course"}
                 </span>
-              </Link>
+              </button>
             )}
           </div>
         </motion.main>
