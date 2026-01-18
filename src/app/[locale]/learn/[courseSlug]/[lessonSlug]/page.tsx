@@ -1,13 +1,17 @@
 "use client";
 
-import { use } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
-import { useQuery } from "convex/react";
-import { api } from "../../../../../../convex/_generated/api";
-import { useLocale } from "next-intl";
+import { useRouter } from "next/navigation";
+import { useQuery, useMutation } from "convex/react";
+import { api } from "~/../convex/_generated/api";
+import { useLocale, useTranslations } from "next-intl";
+import { useUser } from "@clerk/nextjs";
 import ReactMarkdown from "react-markdown";
 import { Button } from "~/components/ui/button";
-import { CheckCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { CheckCircle, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import type { Id } from "~/../convex/_generated/dataModel";
+
 interface Lesson {
   _id: string;
   slug: string;
@@ -47,14 +51,100 @@ export default function LessonPage({
 }) {
   const { courseSlug, lessonSlug } = use(params);
   const locale = useLocale();
+  const router = useRouter();
+  const t = useTranslations("dashboard.courseDetail");
+  const { user: clerkUser } = useUser();
+  const [isCompleting, setIsCompleting] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const lessonData = useQuery(api.lessons.getWithNavigation, {
     slug: lessonSlug,
   }) as LessonData | null | undefined;
 
-  // Track completion (placeholder mutation for now)
-  // const completeLesson = useMutation(api.progress.completeLesson);
+  const convexUser = useQuery(
+    api.users.getByClerkId,
+    clerkUser?.id ? { clerkId: clerkUser.id } : "skip",
+  );
+
+  const lessonProgress = useQuery(
+    api.progress.getForLesson,
+    convexUser?._id && lessonData?.lesson?._id
+      ? {
+          userId: convexUser._id,
+          lessonId: lessonData.lesson._id as unknown as Id<"lessons">,
+        }
+      : "skip",
+  );
+
+  const completeLesson = useMutation(api.progress.completeLesson);
+  const startLesson = useMutation(api.progress.startLesson);
+
+  const shouldStartLesson =
+    convexUser?._id && lessonData?.lesson?._id && lessonProgress === null;
+
+  if (shouldStartLesson) {
+    void startLesson({
+      userId: convexUser._id,
+      lessonId: lessonData.lesson._id as unknown as Id<"lessons">,
+    });
+  }
+
+  const isCompleted = lessonProgress?.status === "completed";
+
+  const handleMarkComplete = async () => {
+    if (!convexUser?._id || !lessonData?.lesson?._id) return;
+
+    setIsCompleting(true);
+    try {
+      await completeLesson({
+        userId: convexUser._id,
+        lessonId: lessonData.lesson._id as unknown as Id<"lessons">,
+      });
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+    } catch (error) {
+      console.error("Failed to complete lesson:", error);
+    } finally {
+      setIsCompleting(false);
+    }
+  };
+
+  const handleNextLesson = async () => {
+    if (!convexUser?._id || !lessonData?.lesson?._id) return;
+
+    setIsNavigating(true);
+    try {
+      await completeLesson({
+        userId: convexUser._id,
+        lessonId: lessonData.lesson._id as unknown as Id<"lessons">,
+      });
+      if (lessonData.nextLesson) {
+        router.push(
+          `/${locale}/learn/${courseSlug}/${lessonData.nextLesson.slug}`,
+        );
+      }
+    } catch (error) {
+      console.error("Failed to complete lesson:", error);
+      setIsNavigating(false);
+    }
+  };
+
+  const handleCompleteCourse = async () => {
+    if (!convexUser?._id || !lessonData?.lesson?._id) return;
+
+    setIsNavigating(true);
+    try {
+      await completeLesson({
+        userId: convexUser._id,
+        lessonId: lessonData.lesson._id as unknown as Id<"lessons">,
+      });
+      router.push(`/${locale}/dashboard/courses`);
+    } catch (error) {
+      console.error("Failed to complete lesson:", error);
+      setIsNavigating(false);
+    }
+  };
 
   if (lessonData === undefined) {
     return (
@@ -72,9 +162,9 @@ export default function LessonPage({
   if (lessonData === null) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
-        <h2 className="text-2xl font-bold">Lesson not found</h2>
+        <h2 className="text-2xl font-bold">{t("notFound")}</h2>
         <Button asChild className="mt-4">
-          <Link href="/dashboard">Back to Dashboard</Link>
+          <Link href={`/${locale}/dashboard`}>Back to Dashboard</Link>
         </Button>
       </div>
     );
@@ -86,16 +176,34 @@ export default function LessonPage({
 
   return (
     <div className="mx-auto max-w-3xl pb-20">
+      {/* Success Toast */}
+      {showSuccess && (
+        <div className="fixed right-6 bottom-6 z-50 flex items-center gap-3 rounded-lg border bg-emerald-500/10 px-4 py-3 text-emerald-600 shadow-lg rtl:right-auto rtl:left-6 dark:text-emerald-400">
+          <CheckCircle className="size-5" />
+          <span className="font-medium">{t("completed")}</span>
+        </div>
+      )}
+
       {/* Lesson Header */}
       <div className="mb-8 border-b pb-8">
+        <div className="mb-4 flex items-center gap-3">
+          {isCompleted && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-600 dark:text-emerald-400">
+              <CheckCircle className="size-3.5" />
+              {t("completed")}
+            </span>
+          )}
+        </div>
         <h1 className="font-display text-foreground mb-4 text-3xl font-bold lg:text-4xl">
           {title}
         </h1>
         <div className="text-muted-foreground flex items-center gap-2 text-sm">
-          <span>{lesson.estimatedMinutes ?? 15} mins</span>
+          <span>
+            {lesson.estimatedMinutes ?? 15} {locale === "ar" ? "دقيقة" : "mins"}
+          </span>
           <span>•</span>
           <span>
-            Module:{" "}
+            {locale === "ar" ? "الوحدة" : "Module"}:{" "}
             {locale === "ar"
               ? lessonData.module.titleAr
               : lessonData.module.titleEn}
@@ -123,11 +231,11 @@ export default function LessonPage({
         <div>
           {prevLesson ? (
             <Button variant="ghost" asChild className="gap-2">
-              <Link href={`/learn/${courseSlug}/${prevLesson.slug}`}>
-                <ChevronLeft className="size-4" />
-                <div className="flex flex-col items-start gap-0.5 text-left">
+              <Link href={`/${locale}/learn/${courseSlug}/${prevLesson.slug}`}>
+                <ChevronLeft className="size-4 rtl:rotate-180" />
+                <div className="flex flex-col items-start gap-0.5 text-left rtl:items-end rtl:text-right">
                   <span className="text-muted-foreground text-xs">
-                    Previous
+                    {locale === "ar" ? "السابق" : "Previous"}
                   </span>
                   <span className="max-w-[150px] truncate">
                     {locale === "ar" ? prevLesson.titleAr : prevLesson.titleEn}
@@ -141,27 +249,55 @@ export default function LessonPage({
         </div>
 
         {/* Mark Complete Button */}
-        <Button size="lg" className="min-w-[160px] gap-2">
-          <CheckCircle className="size-4" />
-          Mark Complete
+        <Button
+          size="lg"
+          className={`min-w-[160px] gap-2 ${isCompleted ? "bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-700" : ""}`}
+          onClick={handleMarkComplete}
+          disabled={isCompleting || isCompleted}
+        >
+          {isCompleting ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <CheckCircle className="size-4" />
+          )}
+          {isCompleted ? t("completed") : t("markComplete")}
         </Button>
 
         <div>
           {nextLesson ? (
-            <Button variant="ghost" asChild className="gap-2">
-              <Link href={`/learn/${courseSlug}/${nextLesson.slug}`}>
-                <div className="flex flex-col items-end gap-0.5 text-right">
-                  <span className="text-muted-foreground text-xs">Next</span>
-                  <span className="max-w-[150px] truncate">
-                    {locale === "ar" ? nextLesson.titleAr : nextLesson.titleEn}
-                  </span>
-                </div>
-                <ChevronRight className="size-4" />
-              </Link>
+            <Button
+              variant="ghost"
+              className="gap-2"
+              onClick={handleNextLesson}
+              disabled={isNavigating}
+            >
+              <div className="flex flex-col items-end gap-0.5 text-right rtl:items-start rtl:text-left">
+                <span className="text-muted-foreground text-xs">
+                  {locale === "ar" ? "التالي" : "Next"}
+                </span>
+                <span className="max-w-[150px] truncate">
+                  {locale === "ar" ? nextLesson.titleAr : nextLesson.titleEn}
+                </span>
+              </div>
+              {isNavigating ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <ChevronRight className="size-4 rtl:rotate-180" />
+              )}
             </Button>
           ) : (
-            <Button variant="outline" asChild>
-              <Link href={`/learn/${courseSlug}`}>Course Complete!</Link>
+            <Button
+              variant="default"
+              className="gap-2 bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-700"
+              onClick={handleCompleteCourse}
+              disabled={isNavigating}
+            >
+              {isNavigating ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <CheckCircle className="size-4" />
+              )}
+              {locale === "ar" ? "إكمال الدورة" : "Complete Course"}
             </Button>
           )}
         </div>
