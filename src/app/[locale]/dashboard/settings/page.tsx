@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import type { Variants, Easing } from "framer-motion";
 import {
@@ -15,11 +16,24 @@ import {
   Trash2,
   Loader2,
   AlertTriangle,
+  GraduationCap,
+  Trophy,
+  BookOpen,
+  ArrowRight,
+  Award,
+  X,
 } from "lucide-react";
 import { useUser, useClerk } from "@clerk/nextjs";
+import { useQuery } from "convex/react";
+import { api } from "@convex/_generated/api";
 import { useLocale, useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
+import {
+  CircularProgress,
+  ProgressBar,
+  Certificate,
+} from "~/components/dashboard";
 import { cn } from "~/lib/utils";
 
 // Animation variants
@@ -128,32 +142,45 @@ export default function SettingsPage() {
   const { user, isLoaded: isUserLoaded } = useUser();
   const { signOut: clerkSignOut } = useClerk();
   const locale = useLocale();
+  const isRTL = locale === "ar";
   const t = useTranslations("dashboard.settings");
   const tCommon = useTranslations("dashboard.common");
 
-  // Client-side hydration fix - only render date after mount
+  const convexUser = useQuery(
+    api.users.getByClerkId,
+    user?.id ? { clerkId: user.id } : "skip",
+  );
+
+  const overallProgress = useQuery(
+    api.progress.getOverallProgress,
+    convexUser?._id ? { userId: convexUser._id } : "skip",
+  );
+
   const [isMounted, setIsMounted] = useState(false);
   const [formattedCreatedAt, setFormattedCreatedAt] = useState<string>("");
+  const [viewingCertificate, setViewingCertificate] = useState<string | null>(
+    null,
+  );
 
-  // Notification states
+  useEffect(() => {
+    setIsMounted(true);
+    if (user?.createdAt) {
+      setFormattedCreatedAt(user.createdAt.toLocaleDateString());
+    }
+  }, [user]);
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [progressUpdates, setProgressUpdates] = useState(true);
   const [learningReminders, setLearningReminders] = useState(false);
-
-  // Loading states
   const [isSaving, setIsSaving] = useState<string | null>(null);
   const [isSigningOut, setIsSigningOut] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Toast state
   const [toast, setToast] = useState<{ message: string } | null>(null);
 
-  // Mark as mounted and format dates only on client
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Format date only when user data is available and component is mounted
   useEffect(() => {
     if (isMounted && user?.createdAt) {
       const formatted = new Intl.DateTimeFormat(locale, {
@@ -165,22 +192,16 @@ export default function SettingsPage() {
     }
   }, [isMounted, user?.createdAt, locale]);
 
-  // Show toast notification
   const showToast = (message: string) => {
     setToast({ message });
     setTimeout(() => setToast(null), 3000);
   };
-
-  // Mock save handlers
   const handleSaveNotification = async (setting: string, _value: boolean) => {
     setIsSaving(setting);
-    // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 800));
     setIsSaving(null);
     showToast(tCommon("save"));
   };
-
-  // Handle sign out
   const handleSignOut = async () => {
     setIsSigningOut(true);
     try {
@@ -192,28 +213,21 @@ export default function SettingsPage() {
     }
   };
 
-  // Handle delete account
   const handleDeleteAccount = async () => {
     if (window.confirm(t("deleteAccountWarning"))) {
       setIsDeleting(true);
-      // Simulate deletion
       await new Promise((resolve) => setTimeout(resolve, 1500));
       setIsDeleting(false);
       showToast("Account deleted");
     }
   };
-
-  // Get current language name
   const getCurrentLanguageName = () => {
     return locale === "en" ? "English" : "العربية";
   };
-
-  // Get available languages
   const getAvailableLanguages = () => {
     return locale === "en" ? ["English", "العربية"] : ["الإنجليزية", "العربية"];
   };
 
-  // Loading state while user data loads
   if (!isUserLoaded) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
@@ -346,7 +360,253 @@ export default function SettingsPage() {
           </Card>
         </motion.section>
 
-        {/* 2. Language Section */}
+        {/* 2. Learning Progress Section */}
+        <motion.section variants={itemVariants}>
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-3">
+                <GraduationCap className="size-5" />
+                {t("learningProgress")}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {overallProgress ? (
+                <>
+                  {/* Overall Progress */}
+                  <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
+                    <CircularProgress
+                      percentage={overallProgress.overallPercentage}
+                      size="lg"
+                      showIcon
+                    />
+                    <div className="flex-1 space-y-4 text-center sm:text-left rtl:sm:text-right">
+                      <div>
+                        <h3 className="font-display text-2xl">
+                          {overallProgress.overallPercentage === 100 ? (
+                            <span className="flex items-center justify-center gap-2 text-emerald-500 sm:justify-start rtl:sm:justify-end dark:text-emerald-400">
+                              <Trophy className="size-6" />
+                              {t("allCoursesCompleted")}
+                            </span>
+                          ) : (
+                            t("overallProgress")
+                          )}
+                        </h3>
+                        <p className="text-muted-foreground mt-1">
+                          {t("progressStats", {
+                            completed: overallProgress.totalLessonsCompleted,
+                            total: overallProgress.totalLessonsAvailable,
+                          })}
+                        </p>
+                      </div>
+                      <div className="flex flex-wrap justify-center gap-4 sm:justify-start rtl:sm:justify-end">
+                        <div className="bg-secondary/50 rounded-lg px-4 py-2">
+                          <span className="font-display text-xl">
+                            {overallProgress.coursesCompleted}
+                          </span>
+                          <span className="text-muted-foreground ml-1 text-sm rtl:mr-1 rtl:ml-0">
+                            / {overallProgress.totalCourses}{" "}
+                            {t("coursesCompleted")}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Per-Course Progress */}
+                  {overallProgress.courseProgress.length > 0 && (
+                    <div className="border-t pt-6">
+                      <h4 className="mb-4 font-mono text-xs tracking-wider uppercase">
+                        {t("courseBreakdown")}
+                      </h4>
+                      <div className="space-y-4">
+                        {overallProgress.courseProgress.map((course) => (
+                          <Link
+                            key={course.courseId}
+                            href={`/${locale}/dashboard/courses/${course.slug}`}
+                            className="group block"
+                          >
+                            <div className="flex items-center gap-4">
+                              <div
+                                className={cn(
+                                  "flex size-10 shrink-0 items-center justify-center rounded-lg transition-colors",
+                                  course.isCompleted
+                                    ? "bg-emerald-500/10 text-emerald-500 dark:text-emerald-400"
+                                    : "bg-secondary text-foreground",
+                                )}
+                              >
+                                {course.isCompleted ? (
+                                  <Trophy className="size-5" />
+                                ) : (
+                                  <BookOpen className="size-5" />
+                                )}
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center justify-between gap-2">
+                                  <span
+                                    className={cn(
+                                      "group-hover:text-primary truncate font-medium transition-colors",
+                                      course.isCompleted &&
+                                        "text-emerald-600 dark:text-emerald-400",
+                                    )}
+                                  >
+                                    {isRTL ? course.titleAr : course.titleEn}
+                                  </span>
+                                  <span
+                                    className={cn(
+                                      "shrink-0 text-sm tabular-nums",
+                                      course.isCompleted
+                                        ? "font-medium text-emerald-600 dark:text-emerald-400"
+                                        : "text-muted-foreground",
+                                    )}
+                                  >
+                                    {course.progressPercentage}%
+                                  </span>
+                                </div>
+                                <div className="mt-2">
+                                  <ProgressBar
+                                    value={course.progressPercentage}
+                                    size="sm"
+                                    className={cn(
+                                      course.isCompleted &&
+                                        "[&_div]:bg-emerald-500 dark:[&_div]:bg-emerald-400",
+                                    )}
+                                  />
+                                </div>
+                                <span className="text-muted-foreground mt-1 block text-xs">
+                                  {course.completedLessons} /{" "}
+                                  {course.totalLessons}{" "}
+                                  {isRTL ? "دروس" : "lessons"}
+                                </span>
+                              </div>
+                              <ArrowRight
+                                className={cn(
+                                  "text-muted-foreground size-4 opacity-0 transition-opacity group-hover:opacity-100",
+                                  isRTL && "rotate-180",
+                                )}
+                              />
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="flex flex-col items-center gap-4 py-8 text-center">
+                  <div className="bg-secondary/50 flex size-16 items-center justify-center rounded-full">
+                    <BookOpen className="text-muted-foreground size-8" />
+                  </div>
+                  <div>
+                    <p className="font-medium">{t("noProgressYet")}</p>
+                    <p className="text-muted-foreground text-sm">
+                      {t("startLearningPrompt")}
+                    </p>
+                  </div>
+                  <Button asChild>
+                    <Link href={`/${locale}/dashboard/courses`}>
+                      {t("browseCourses")}
+                    </Link>
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </motion.section>
+
+        {/* 3. Certificates Section */}
+        <motion.section variants={itemVariants}>
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-3">
+                <Award className="size-5" />
+                {t("certificates")}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {overallProgress?.courseProgress.some((c) => c.isCompleted) ? (
+                <div className="grid gap-6">
+                  {overallProgress.courseProgress
+                    .filter((c) => c.isCompleted)
+                    .map((course) => (
+                      <div
+                        key={course.courseId}
+                        className="bg-secondary/20 border-border overflow-hidden rounded-xl border"
+                      >
+                        <div className="flex items-center justify-between p-4">
+                          <div className="flex items-center gap-4">
+                            <div className="flex size-12 items-center justify-center rounded-full bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-500">
+                              <Trophy className="size-6" />
+                            </div>
+                            <div>
+                              <h4 className="font-display font-medium">
+                                {isRTL ? course.titleAr : course.titleEn}
+                              </h4>
+                              <p className="text-muted-foreground text-sm">
+                                {t("allCoursesCompleted")}
+                              </p>
+                            </div>
+                          </div>
+                          <Button
+                            variant={
+                              viewingCertificate === course.slug
+                                ? "secondary"
+                                : "default"
+                            }
+                            onClick={() =>
+                              setViewingCertificate(
+                                viewingCertificate === course.slug
+                                  ? null
+                                  : course.slug,
+                              )
+                            }
+                          >
+                            {viewingCertificate === course.slug ? (
+                              <X className="mr-2 size-4" />
+                            ) : (
+                              <Award className="mr-2 size-4" />
+                            )}
+                            {viewingCertificate === course.slug
+                              ? t("close")
+                              : t("viewCertificate")}
+                          </Button>
+                        </div>
+
+                        {/* Certificate View */}
+                        {viewingCertificate === course.slug && (
+                          <div className="bg-secondary/10 animate-in fade-in slide-in-from-top-4 border-t p-6 duration-300 sm:p-8">
+                            <Certificate
+                              userName={user?.fullName ?? "Valued Student"}
+                              courseTitleEn={course.titleEn}
+                              courseTitleAr={course.titleAr}
+                              completedAt={
+                                course.completedAt
+                                  ? new Date(course.completedAt)
+                                  : new Date()
+                              }
+                            />
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center gap-4 py-8 text-center">
+                  <div className="bg-secondary/50 flex size-16 items-center justify-center rounded-full">
+                    <Award className="text-muted-foreground size-8" />
+                  </div>
+                  <div>
+                    <p className="font-medium">{t("noCertificates")}</p>
+                    <p className="text-muted-foreground text-sm">
+                      {t("noCertificatesSubtitle")}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </motion.section>
+
+        {/* 4. Language Section */}
         <motion.section variants={itemVariants}>
           <Card>
             <CardHeader>
