@@ -106,6 +106,28 @@ pnpm content:refresh
 └── public/             # Static assets
 ```
 
+## 📚 Documentation
+
+Comprehensive documentation is available in the `/docs` directory:
+
+### Core Documentation
+- **[API Documentation](docs/api-documentation.md)** - Complete API reference for Convex functions and Next.js routes
+- **[Component Library](docs/component-library.md)** - UI components with usage examples and props documentation
+- **[Deployment Guide](docs/deployment-guide.md)** - Development workflow and deployment instructions
+- **[Testing Guide](docs/testing-guide.md)** - Testing strategies, tools, and best practices
+- **[Internationalization Guide](docs/internationalization-guide.md)** - i18n setup and bilingual development
+- **[Troubleshooting & FAQ](docs/troubleshooting-faq.md)** - Common issues and solutions
+
+### Architecture & Design
+- **[Architecture Design](docs/architecture-design-document.md)** - High-level system architecture
+- **[Database Schema](docs/database-schema.md)** - Data models and relationships
+- **[Frontend Guidelines](docs/frontend-guidelines.md)** - UI/UX patterns and standards
+- **[Implementation Plan](docs/implementation-plan.md)** - Development roadmap and milestones
+
+### Requirements & Planning
+- **[Product Requirements](docs/product-requirements-document.md)** - Feature specifications and user stories
+- **[Software Requirements](docs/software-requirements-specification.md)** - Technical requirements and constraints
+
 ## 🤝 Contributing
 
 1.  Fork the project
