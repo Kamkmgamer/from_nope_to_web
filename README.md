@@ -48,8 +48,8 @@ This project is built on the [T3 Stack](https://create.t3.gg/) principles but ev
 1.  **Clone the repository**
 
     ```bash
-    git clone https://github.com/kamkmgamer/from-nope-to-web.git
-    cd from-nope-to-web
+    git clone https://github.com/kamkmgamer/from_nope_to_web.git
+    cd from_nope_to_web
     ```
 
 2.  **Install dependencies**
